@@ -17,14 +17,23 @@ export class App extends Component {
   }
 
   onDrawerToggleHandler = () => {
-    this.setState(state => ({ openDrawer: !state.openDrawer }))
+    this.setState((state) => ({ openDrawer: !state.openDrawer }))
   }
 
-  render() {
+  render () {
     return (
-      <div className="App">
-        <Header onDrawerOpen={this.onDrawerToggleHandler} />
-        <Drawer menuList="menu" show={this.state.openDrawer} onClose={this.onDrawerToggleHandler} />
+      <div
+        className="App"
+      >
+        <Header
+          menuList={menu}
+          onDrawerOpen={this.onDrawerToggleHandler}
+        />
+        <Drawer
+          menuList={menu}
+          show={this.state.openDrawer}
+          onClose={this.onDrawerToggleHandler}
+        />
       </div>
     )
   }
