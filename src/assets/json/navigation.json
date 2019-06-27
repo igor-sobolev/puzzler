@@ -1,0 +1,9 @@
+[
+  { "label": "Browse Puzzles", "icon": "view_module", "requiresAuth": false },
+  { "label": "Log In", "icon": "person_outline", "requiresAuth": false },
+
+  { "label": "Browse Puzzles", "icon": "view_module", "requiresAuth": true },
+  { "label": "My Puzzles", "icon": "insert_photo", "requiresAuth": true },
+  { "label": "My Profile", "icon": "person", "requiresAuth": true },
+  { "label": "Log Out", "icon": "logout", "requiresAuth": true }
+]

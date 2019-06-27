@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
-import './App.css'
+import Container from '@material-ui/core/Container'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import routes from '@/router'
 
-import { Header } from '@/components/Header'
-import { Drawer } from '@/components/Drawer'
+import { Header } from '@/components/Navigation/Header'
+import { Drawer } from '../../components/Navigation/Drawer'
+import { RouterView } from '@/components/RouterView'
 
-const menu = [
-  { label: 'Browse puzzles', icon: 'view_module' },
-  { label: 'My puzzles', icon: 'insert_photo' },
-  { label: 'My profile', icon: 'person' },
-  { label: 'Log out', icon: 'logout' }
-]
+import * as classes from './App.module.styl'
 
 export class App extends Component {
   state = {
-    openDrawer: true
+    openDrawer: false
   }
 
   onDrawerToggleHandler = () => {
@@ -22,18 +20,20 @@ export class App extends Component {
 
   render () {
     return (
-      <div
-        className="App"
-      >
-        <Header
-          menuList={menu}
-          onDrawerOpen={this.onDrawerToggleHandler}
-        />
+      <div className={classes.app}>
+        <CssBaseline />
+        <Header onDrawerOpen={this.onDrawerToggleHandler} />
         <Drawer
-          menuList={menu}
           show={this.state.openDrawer}
           onClose={this.onDrawerToggleHandler}
         />
+        <Container
+          component="main"
+          maxWidth="xs"
+          className={classes.main}
+        >
+          <RouterView routes={routes}></RouterView>
+        </Container>
       </div>
     )
   }
