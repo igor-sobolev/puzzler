@@ -15,7 +15,7 @@ export const logIn = () => {
     // const deferred = q.defer()
     try {
       let response = await AuthAPI.logIn(formData)
-      let authenticatedUser = await response.json()
+      let authenticatedUser = response.data
       console.log(authenticatedUser)
       // deferred.resolve()
     } catch (e) {

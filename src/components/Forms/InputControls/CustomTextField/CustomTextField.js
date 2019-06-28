@@ -6,8 +6,8 @@ import TextField from '@material-ui/core/TextField'
 export const CustomTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
   <TextField
     label={label}
-    error={touched && error}
-    helperText={error}
+    error={Boolean(touched && error)}
+    helperText={touched ? error : null}
     {...input}
     {...custom}
   />

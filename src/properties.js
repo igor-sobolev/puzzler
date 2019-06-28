@@ -1,4 +1,4 @@
 export default {
-  SERVER_URL: 'localhost:61309',
+  SERVER_URL: 'http://localhost:61301',
   TOAST_TIME: 3000
 }
