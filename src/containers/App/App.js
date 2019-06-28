@@ -4,10 +4,10 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import routes from '@/router'
 
 import { Header } from '@/components/Navigation/Header'
-import { Drawer } from '../../components/Navigation/Drawer'
+import { Drawer } from '@/components/Navigation/Drawer'
 import { RouterView } from '@/components/RouterView'
 
-import * as classes from './App.module.styl'
+import './App.styl'
 
 export class App extends Component {
   state = {
@@ -20,7 +20,7 @@ export class App extends Component {
 
   render () {
     return (
-      <div className={classes.app}>
+      <div className="app">
         <CssBaseline />
         <Header onDrawerOpen={this.onDrawerToggleHandler} />
         <Drawer
@@ -30,7 +30,7 @@ export class App extends Component {
         <Container
           component="main"
           maxWidth="xs"
-          className={classes.main}
+          className="main"
         >
           <RouterView routes={routes}></RouterView>
         </Container>

@@ -1,32 +1,15 @@
 const path = require('path')
+const rewireStyl = require('react-app-rewire-stylus-modules')
 
-module.exports = function override (config) {
+module.exports = function override (config, env) {
   config.resolve = {
     ...config.resolve,
-    alias: { '@': path.resolve(__dirname, 'src') }
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
   }
 
-  // config.module = {
-  //   ...config.module,
-  //   rules: [
-  //     ...config.module.rules,
-  //     {
-  //       test: /\.styl$/,
-  //       exclude: /node_modules/,
-  //       use: [
-  //         {
-  //           loader: 'style-loader' // creates style nodes from JS strings
-  //         },
-  //         {
-  //           loader: 'css-loader' // translates CSS into CommonJS
-  //         },
-  //         {
-  //           loader: 'stylus-loader' // compiles Stylus to CSS
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // }
+  rewireStyl(config, env)
 
   return config
 }
