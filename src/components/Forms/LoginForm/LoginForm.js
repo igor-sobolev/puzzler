@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = (props) => {
   const classes = useStyles()
   const { handleSubmit } = props
-
   return (
     <form
       className={classes.form}
@@ -65,6 +64,7 @@ const LoginForm = (props) => {
         variant="contained"
         color="primary"
         className={classes.submit}
+        disabled={props.pristine || props.invalid || props.submitting}
       >
         Sign In
       </Button>
@@ -73,7 +73,10 @@ const LoginForm = (props) => {
 }
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
+  pristine: PropTypes.bool,
+  invalid: PropTypes.bool,
+  submitting: PropTypes.bool
 }
 
 export default reduxForm({

@@ -26,11 +26,6 @@ const styles = (theme) => ({
 })
 
 class Login extends Component {
-  lol = (e) => {
-    e.preventDefault()
-    console.log('login')
-    this.props.logInHandler(e)
-  }
   render () {
     return (
       <React.Fragment>
@@ -46,7 +41,7 @@ class Login extends Component {
           </Typography>
           <LoginForm
             classes={this.props.classes}
-            handleSubmit={this.lol}
+            handleSubmit={this.props.logInHandler}
           />
           <Grid
             container
@@ -55,7 +50,9 @@ class Login extends Component {
             <NavLink
               to="/register"
               variant="body2"
-            >New here? Register!</NavLink>
+            >
+              New here? Register!
+            </NavLink>
           </Grid>
         </div>
       </React.Fragment>
@@ -65,7 +62,8 @@ class Login extends Component {
 
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
-  logInHandler: PropTypes.func
+  logInHandler: PropTypes.func,
+  authenticatedUser: PropTypes.object
 }
 
 const mapDispatchToProps = (dispatch) => ({

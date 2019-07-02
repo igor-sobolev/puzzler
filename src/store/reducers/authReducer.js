@@ -1,16 +1,38 @@
-// import * as actionTypes from '../actions/actionTypes'
+import * as actionTypes from '../actions/actionTypes'
 
-const initialState = {}
-
-const addIngredient = (/*state, action*/) => {
-  // do something
-  return 'updatedState'
+const initializeState = () => {
+  let user = null
+  try {
+    user = JSON.parse(localStorage.getItem('user'))
+  } catch (e) {
+    localStorage.clear()
+  }
+  return {
+    user
+  }
 }
 
-const reducer = (state = initialState, action) => {
+const saveUser = (state, action) => {
+  const newState = {
+    ...state,
+    user: action.authenticatedUser
+  }
+  if (action.remember) localStorage.setItem('user', JSON.stringify(action.authenticatedUser))
+  return newState
+}
+
+const clearSession = () => {
+  localStorage.clear()
+  const newState = initializeState()
+  return newState
+}
+
+const reducer = (state = initializeState(), action) => {
   switch (action.type) {
-    case 'actionTypes.ADD_INGREDIENT':
-      return addIngredient(state, action)
+    case actionTypes.SAVE_USER:
+      return saveUser(state, action)
+    case actionTypes.CLEAR_SESSION:
+      return clearSession(state)
     default:
       return state
   }

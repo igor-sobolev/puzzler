@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import Drawer from '@material-ui/core/Drawer'
 
@@ -19,8 +20,12 @@ const useStyles = makeStyles({
   }
 })
 
-export const NavigationDrawer = (props) => {
+const NavigationDrawer = (props) => {
   const classes = useStyles()
+
+  const isAuthenticated = () => {
+    return Boolean(props.authenticatedUser !== null && props.authenticatedUser.token)
+  }
 
   const sideList = (
     <div
@@ -28,13 +33,15 @@ export const NavigationDrawer = (props) => {
       role="presentation"
     >
       <List>
-        {menuList.map((item, index) => (
-          <NavItem
-            key={index}
-            item={item}
-            icon={true}
-          ></NavItem>
-        ))}
+        {menuList
+          .filter((item) => item.requiresAuth === isAuthenticated())
+          .map((item, index) => (
+            <NavItem
+              key={index}
+              item={item}
+              icon={true}
+            ></NavItem>
+          ))}
       </List>
     </div>
   )
@@ -52,5 +59,12 @@ export const NavigationDrawer = (props) => {
 
 NavigationDrawer.propTypes = {
   onClose: PropTypes.func,
-  show: PropTypes.bool
+  show: PropTypes.bool,
+  authenticatedUser: PropTypes.object
 }
+
+const mapStateToProps = (state) => ({
+  authenticatedUser: state.auth.user
+})
+
+export default connect(mapStateToProps)(NavigationDrawer)

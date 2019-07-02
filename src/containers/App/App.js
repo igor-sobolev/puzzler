@@ -5,11 +5,11 @@ import routes from '@/router'
 
 import { Header } from '@/components/Navigation/Header'
 import { Drawer } from '@/components/Navigation/Drawer'
-import { RouterView } from '@/components/RouterView'
+import { RouterView } from '@/containers/RouterView'
 
 import './App.styl'
 
-export class App extends Component {
+class App extends Component {
   state = {
     openDrawer: false
   }
@@ -38,3 +38,5 @@ export class App extends Component {
     )
   }
 }
+
+export default App

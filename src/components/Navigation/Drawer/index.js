@@ -1,1 +1,2 @@
-export { NavigationDrawer as Drawer } from './Drawer'
+import NavigationDrawer from './Drawer'
+export { NavigationDrawer as Drawer }

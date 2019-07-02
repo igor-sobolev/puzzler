@@ -1,29 +1,39 @@
-// import * as actionTypes from './actionTypes'
+import { stopSubmit, startSubmit } from 'redux-form'
+import * as actionTypes from './actionTypes'
 import AuthAPI from '@/api/AuthAPI'
-// import q from 'q'
 
-export const addIngredient = (name) => {
+const loginFormName = 'LoginForm'
+
+export const saveUser = (data) => {
   return {
-    type: 'actionTypes.ADD_INGREDIENT',
-    ingredientName: name
+    type: actionTypes.SAVE_USER,
+    ...data
+  }
+}
+
+export const clearSession = () => {
+  return {
+    type: actionTypes.CLEAR_SESSION
   }
 }
 
 export const logIn = () => {
   return async (dispatch, getState) => {
     const { remember, ...formData } = getState().form.LoginForm.values
-    // const deferred = q.defer()
+    dispatch(startSubmit(loginFormName))
     try {
       let response = await AuthAPI.logIn(formData)
       let authenticatedUser = response.data
-      console.log(authenticatedUser)
-      // deferred.resolve()
-    } catch (e) {
-      let error = await e
-      console.log(error)
-      // deferred.reject()
+      dispatch(saveUser({ authenticatedUser, remember }))
+    } finally {
+      dispatch(stopSubmit(loginFormName))
     }
-    // dispatch(addIngredient)
-    // return deferred.promise
+  }
+}
+
+export const logOut = () => {
+  return async (dispatch) => {
+    // potential api call
+    dispatch(clearSession())
   }
 }
