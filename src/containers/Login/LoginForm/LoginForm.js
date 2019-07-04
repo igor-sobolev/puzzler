@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 
 import Button from '@material-ui/core/Button'
-import { CustomCheckbox } from '@/components/Forms/InputControls/CustomCheckbox'
-import { CustomTextField } from '@/components/Forms/InputControls/CustomTextField'
+import { CustomCheckbox } from '@/components/UI/InputControls/CustomCheckbox'
+import { CustomTextField } from '@/components/UI/InputControls/CustomTextField'
 import { validator as validate } from './validator'
 
 const useStyles = makeStyles((theme) => ({

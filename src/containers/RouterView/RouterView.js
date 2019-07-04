@@ -9,6 +9,10 @@ const LazyLogin = React.lazy(() =>
   import('@/containers/Login').then((module) => ({ default: module.Login }))
 )
 
+const LazyRegister = React.lazy(() =>
+  import('@/containers/Register').then((module) => ({ default: module.Register }))
+)
+
 const LazyLogout = React.lazy(() =>
   import('@/containers/Logout').then((module) => ({ default: module.Logout }))
 )
@@ -38,11 +42,16 @@ const RouterView = (props) => {
           exact
           component={LazyMyPuzzles}
         /> : null}
-        <Route
+        {!isAuthenticated() ? <Route
           path="/login"
           exact
           component={LazyLogin}
-        />
+        /> : null}
+        {!isAuthenticated() ? <Route
+          path="/register"
+          exact
+          component={LazyRegister}
+        /> : null}
         <Route
           path="/logout"
           exact

@@ -5,15 +5,15 @@ import './index.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import { App } from '@/containers/App'
 import * as serviceWorker from './serviceWorker'
-import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import store from '@/store'
+import { ConnectedRouter } from 'connected-react-router'
+import store, { history } from '@/store'
 
 const app = (
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <App />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>
 )
 

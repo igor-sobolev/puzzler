@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux'
 import authReducer from '@/store/reducers/authReducer'
 import { reducer as formReducer } from 'redux-form'
+import { connectRouter } from 'connected-react-router'
 
-const rootReducer = combineReducers({
-  auth: authReducer,
-  form: formReducer  
-})
-
-export default rootReducer
+export default (history) => {
+  return combineReducers({
+    auth: authReducer,
+    form: formReducer,
+    router: connectRouter(history)
+  })
+}

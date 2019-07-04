@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import routes from '@/router'
 
 import { Header } from '@/components/Navigation/Header'
 import { Drawer } from '@/components/Navigation/Drawer'
@@ -32,7 +31,7 @@ class App extends Component {
           maxWidth="xs"
           className="main"
         >
-          <RouterView routes={routes}></RouterView>
+          <RouterView></RouterView>
         </Container>
       </div>
     )

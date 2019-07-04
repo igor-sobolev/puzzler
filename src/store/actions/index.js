@@ -1,4 +1,5 @@
 export {
   logIn,
-  logOut
+  logOut,
+  register
 } from './auth'

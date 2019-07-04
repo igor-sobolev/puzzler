@@ -1,8 +1,10 @@
 import { stopSubmit, startSubmit } from 'redux-form'
 import * as actionTypes from './actionTypes'
 import AuthAPI from '@/api/AuthAPI'
+import { push } from 'connected-react-router'
 
 const loginFormName = 'LoginForm'
+const registerFormName = 'RegisterForm'
 
 export const saveUser = (data) => {
   return {
@@ -35,5 +37,18 @@ export const logOut = () => {
   return async (dispatch) => {
     // potential api call
     dispatch(clearSession())
+  }
+}
+
+export const register = () => {
+  return async (dispatch, getState) => {
+    const { password2, ...formData } = getState().form.RegisterForm.values
+    dispatch(startSubmit(registerFormName))
+    try {
+      await AuthAPI.register(formData)
+      dispatch(push('/login'))
+    } finally {
+      dispatch(stopSubmit(registerFormName))
+    }
   }
 }

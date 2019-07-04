@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 
-import { logIn } from '@/store/actions'
+import { register } from '@/store/actions'
 
 import { NavLink } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
-import { LoginForm } from '@/containers/Login/LoginForm'
+import { RegisterForm } from '@/containers/Register/RegisterForm'
 
 const styles = (theme) => ({
   paper: {
@@ -25,7 +25,7 @@ const styles = (theme) => ({
   }
 })
 
-class Login extends Component {
+class Register extends Component {
   render () {
     return (
       <React.Fragment>
@@ -37,21 +37,21 @@ class Login extends Component {
             component="h1"
             variant="h5"
           >
-            Sign in
+            Register
           </Typography>
-          <LoginForm
+          <RegisterForm
             classes={this.props.classes}
-            handleSubmit={this.props.logInHandler}
+            handleSubmit={this.props.registerHandler}
           />
           <Grid
             container
             justify="center"
           >
             <NavLink
-              to="/register"
+              to="/login"
               variant="body2"
             >
-              New here? Register!
+              Already registered? Log in!
             </NavLink>
           </Grid>
         </div>
@@ -60,20 +60,20 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
+Register.propTypes = {
   classes: PropTypes.object.isRequired,
-  logInHandler: PropTypes.func,
+  registerHandler: PropTypes.func,
   authenticatedUser: PropTypes.object
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  logInHandler: (event) => {
+  registerHandler: (event) => {
     event.preventDefault()
-    dispatch(logIn())
+    dispatch(register())
   }
 })
 
 export default connect(
   null,
   mapDispatchToProps
-)(withStyles(styles)(Login))
+)(withStyles(styles)(Register))

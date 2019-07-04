@@ -1,0 +1,2 @@
+export const emailRE = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+export const passwordRE = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/ // at least 1 capital 1 letter and 1 digit, and 6 or more characters generally
