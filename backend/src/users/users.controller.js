@@ -15,17 +15,21 @@ router.delete('/:id', _delete)
 function authenticate (req, res, next) {
   userService
     .authenticate(req.body)
-    .then((user) =>
-      user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' })
-    )
+    .then((user) => {
+      return user
+        ? res.json(user)
+        : res.status(400).json({ message: 'Username or password is incorrect' })
+    })
     .catch((err) => next(err))
 }
 
-function register (req, res, next) {
+function register (req, res) {
   userService
     .create(req.body)
-    .then(() => res.json({}))
-    .catch((err) => next(err))
+    .then(() => {
+      return res.status(200).json({})
+    })
+    .catch((err) => res.status(500).json({ message: err }))
 }
 
 function getAll (req, res, next) {

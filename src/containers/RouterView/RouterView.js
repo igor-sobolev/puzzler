@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react'
-import { Redirect, Route, withRouter, Switch } from 'react-router-dom'
+import React, { Suspense, Component } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -29,51 +29,52 @@ const LazyMyPuzzles = React.lazy(() =>
   import('@/containers/MyPuzzles').then((module) => ({ default: module.MyPuzzles }))
 )
 
-const RouterView = (props) => {
-  const isAuthenticated = () => {
-    return props.authenticatedUser !== null && props.authenticatedUser.token
+class RouterView extends Component {
+  isAuthenticated = () => {
+    return this.props.authenticatedUser !== null && this.props.authenticatedUser.token
   }
-
-  return (
-    <Suspense fallback={<Spinner />}>
-      <Switch>
-        {isAuthenticated() ? <Route
-          path="/puzzles/my"
-          exact
-          component={LazyMyPuzzles}
-        /> : null}
-        {!isAuthenticated() ? <Route
-          path="/login"
-          exact
-          component={LazyLogin}
-        /> : null}
-        {!isAuthenticated() ? <Route
-          path="/register"
-          exact
-          component={LazyRegister}
-        /> : null}
-        <Route
-          path="/logout"
-          exact
-          component={LazyLogout}
-        />
-        <Route
-          path="/users/:id"
-          exact
-          component={LazyUser}
-        />
-        <Route
-          path="/puzzles"
-          exact
-          component={LazyPuzzles}
-        />
-        <Redirect
-          to="/puzzles"
-          from="*"
-        />
-      </Switch>
-    </Suspense>
-  )
+  render () {
+    return (
+      <Suspense fallback={<Spinner />}>
+        <Switch>
+          {this.isAuthenticated() ? <Route
+            path="/puzzles/my"
+            exact
+            component={LazyMyPuzzles}
+          /> : null}
+          {!this.isAuthenticated() ? <Route
+            path="/login"
+            exact
+            component={LazyLogin}
+          /> : null}
+          {!this.isAuthenticated() ? <Route
+            path="/register"
+            exact
+            component={LazyRegister}
+          /> : null}
+          <Route
+            path="/logout"
+            exact
+            component={LazyLogout}
+          />
+          <Route
+            path="/users/:id"
+            exact
+            component={LazyUser}
+          />
+          <Route
+            path="/puzzles"
+            exact
+            component={LazyPuzzles}
+          />
+          <Redirect
+            to="/puzzles"
+            from="*"
+          />
+        </Switch>
+      </Suspense>
+    )
+  }
 }
 
 RouterView.propTypes = {
@@ -84,4 +85,4 @@ const mapStateToProps = (state) => ({
   authenticatedUser: state.auth.user
 })
 
-export default connect(mapStateToProps)(withRouter(RouterView))
+export default connect(mapStateToProps)(RouterView)

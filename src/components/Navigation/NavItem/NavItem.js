@@ -28,6 +28,7 @@ export const NavItem = (props) => {
     <NavLink
       className={classes.link}
       to={props.item.path}
+      exact
       activeClassName={classes.linkActive}
     >
       <ListItem button>
