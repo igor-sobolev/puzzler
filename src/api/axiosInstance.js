@@ -19,7 +19,7 @@ const authHandler = (config) => {
       Authorization: 'Bearer ' + token
     }
   }
-  return newConfig
+  return Promise.resolve(newConfig)
 }
 
 const errorHandler = (error) => {
@@ -28,7 +28,7 @@ const errorHandler = (error) => {
       ? error.response.data.message
       : 'Something went wrong!'
   toastService.error(message)
-  return error
+  return Promise.reject(error)
 }
 
 instance.interceptors.request.use(authHandler)
