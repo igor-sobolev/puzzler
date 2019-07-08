@@ -27,6 +27,7 @@ export const logIn = () => {
       let response = await AuthAPI.logIn(formData)
       let authenticatedUser = response.data
       dispatch(saveUser({ authenticatedUser, remember }))
+      dispatch(push('/puzzles'))
     } finally {
       dispatch(stopSubmit(loginFormName))
     }

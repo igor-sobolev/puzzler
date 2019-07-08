@@ -1,14 +1,14 @@
 import * as actionTypes from '../actions/actionTypes'
 
 const initializeState = () => {
-  let user = null
+  let parsedUser = null
   try {
-    user = JSON.parse(localStorage.getItem('user'))
+    parsedUser = JSON.parse(localStorage.getItem('user'))
   } catch (e) {
     localStorage.clear()
   }
   return {
-    user
+    user: parsedUser || {}
   }
 }
 

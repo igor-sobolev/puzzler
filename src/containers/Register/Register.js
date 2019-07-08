@@ -7,6 +7,7 @@ import { register } from '@/store/actions'
 
 import { NavLink } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar'
+import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
@@ -29,7 +30,10 @@ class Register extends Component {
   render () {
     return (
       <React.Fragment>
-        <div className={this.props.classes.paper}>
+        <Container
+          maxWidth="xs"
+          className={this.props.classes.paper}
+        >
           <Avatar className={this.props.classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -54,7 +58,7 @@ class Register extends Component {
               Already registered? Log in!
             </NavLink>
           </Grid>
-        </div>
+        </Container>
       </React.Fragment>
     )
   }

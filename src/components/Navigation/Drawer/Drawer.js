@@ -24,7 +24,7 @@ const NavigationDrawer = (props) => {
   const classes = useStyles()
 
   const isAuthenticated = () => {
-    return Boolean(props.authenticatedUser !== null && props.authenticatedUser.token)
+    return Boolean(props.authenticatedUser && props.authenticatedUser.token)
   }
 
   const sideList = (

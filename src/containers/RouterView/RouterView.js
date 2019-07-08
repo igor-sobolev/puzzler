@@ -31,7 +31,7 @@ const LazyMyPuzzles = React.lazy(() =>
 
 class RouterView extends Component {
   isAuthenticated = () => {
-    return this.props.authenticatedUser !== null && this.props.authenticatedUser.token
+    return Boolean(this.props.authenticatedUser && this.props.authenticatedUser.token)
   }
   render () {
     return (
@@ -42,16 +42,16 @@ class RouterView extends Component {
             exact
             component={LazyMyPuzzles}
           /> : null}
-          {!this.isAuthenticated() ? <Route
+          <Route
             path="/login"
             exact
             component={LazyLogin}
-          /> : null}
-          {!this.isAuthenticated() ? <Route
+          />
+          <Route
             path="/register"
             exact
             component={LazyRegister}
-          /> : null}
+          />
           <Route
             path="/logout"
             exact
