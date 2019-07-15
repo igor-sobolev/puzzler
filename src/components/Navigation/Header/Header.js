@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { NavLink } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
+import Container from '@material-ui/core/Container'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
@@ -10,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
 import Tooltip from '@material-ui/core/Tooltip'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import { Grid } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,39 +45,46 @@ export const Header = (props) => {
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <Tooltip title="Open navigation drawer">
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={props.onDrawerOpen}
+          <Container>
+            <Grid
+              container
+              alignItems="center"
             >
-              <MenuIcon />
-            </IconButton>
-          </Tooltip>
-          <Typography
-            className={classes.title}
-            variant="h6"
-            noWrap
-          >
-            Puzzler
-          </Typography>
-          {isAuthenticated() ? (
-            <NavLink
-              to={getUserPath()}
-              className={classes.profileBtn}
-            >
-              <Tooltip title="Go to profile">
+              <Tooltip title="Open navigation drawer">
                 <IconButton
-                  aria-label="Account of current user"
+                  edge="start"
+                  className={classes.menuButton}
                   color="inherit"
+                  aria-label="Open drawer"
+                  onClick={props.onDrawerOpen}
                 >
-                  <AccountCircle />
+                  <MenuIcon />
                 </IconButton>
               </Tooltip>
-            </NavLink>
-          ) : null}
+              <Typography
+                className={classes.title}
+                variant="h6"
+                noWrap
+              >
+                Puzzler
+              </Typography>
+              {isAuthenticated() ? (
+                <NavLink
+                  to={getUserPath()}
+                  className={classes.profileBtn}
+                >
+                  <Tooltip title="Go to profile">
+                    <IconButton
+                      aria-label="Account of current user"
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                  </Tooltip>
+                </NavLink>
+              ) : null}
+            </Grid>
+          </Container>
         </Toolbar>
       </AppBar>
     </div>
