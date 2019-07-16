@@ -26,7 +26,7 @@ export const UploadDialog = (props) => {
       <DialogTitle>Upload image</DialogTitle>
       <DialogContent className={classes.content}>
         <UploadForm
-          handleClose={props.onClose}
+          handleCancel={props.onClose}
           handleSubmit={props.onSubmit}
         />
       </DialogContent>

@@ -14,13 +14,19 @@ class UploadForm extends Component {
     handleSubmit: PropTypes.func,
     handleCancel: PropTypes.func,
     reset: PropTypes.func,
-    invalid: PropTypes.bool
+    invalid: PropTypes.bool,
+    pristine: PropTypes.bool
+  }
+
+  onSubmitHandler = (e) => {
+    e.preventDefault()
+    this.props.handleSubmit()
   }
 
   render () {
-    const { handleSubmit, handleCancel } = this.props
+    const { handleCancel } = this.props
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={this.onSubmitHandler}>
         <div>
           <label
             htmlFor={FILE_FIELD_NAME}
@@ -54,7 +60,7 @@ class UploadForm extends Component {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={this.props.invalid}
+              disabled={this.props.pristine || this.props.invalid}
             >
               Upload
             </Button>

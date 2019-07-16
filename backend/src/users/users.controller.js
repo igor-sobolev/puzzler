@@ -1,5 +1,6 @@
 ﻿import express from 'express'
 import userService from './user.service'
+import { upload } from '../storage'
 
 const router = express.Router()
 
@@ -10,6 +11,7 @@ router.get('/', getAll)
 router.get('/current', getCurrent)
 router.get('/:id', getById)
 router.put('/:id', update)
+router.put('/:id/avatar', upload.array('files'), updateAvatar)
 router.delete('/:id', _delete)
 
 function authenticate (req, res, next) {
@@ -58,6 +60,17 @@ function update (req, res, next) {
     .update(req.params.id, req.body)
     .then(() => res.json({}))
     .catch((err) => next(err))
+}
+
+function updateAvatar (req, res, next) {
+  console.log(req.files);
+  res.status(200).send(req.body)
+  // upload()
+  // userService
+  //   .uploadAvatar(req, res)
+  //   .updateAvar(req.params.id, req.body)
+  //   .then(() => res.status(200).json({}))
+  //   .catch((err) => next(err))
 }
 
 function _delete (req, res, next) {

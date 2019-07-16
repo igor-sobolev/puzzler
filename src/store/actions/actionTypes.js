@@ -1,2 +1,3 @@
 export const SAVE_USER = 'SAVE_USER'
+export const SAVE_USER_PROFILE = 'SAVE_USER_PROFILE'
 export const CLEAR_SESSION = 'CLEAR_SESSION'

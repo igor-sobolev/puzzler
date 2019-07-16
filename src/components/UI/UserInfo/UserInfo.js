@@ -33,7 +33,6 @@ const UserProfile = (props) => {
           variant="subtitle1"
           className={props.classes.email}
         >
-          <b>Email:&nbsp;</b>
           {props.user.email}
         </Typography>
       </Grid>

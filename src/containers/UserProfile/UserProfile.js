@@ -5,25 +5,20 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import { connect } from 'react-redux'
 
-import { uploadAvatar } from '@/store/actions'
+import { uploadAvatar, loadUserProfile } from '@/store/actions'
 
 import { UserAvatar } from '@/components/UI/UserAvatar'
 import { PageLayout } from '@/components/UI/PageLayout'
-import { PageHeading } from '@/components/UI/PageHeading'
 import { UserInfo } from '@/components/UI/UserInfo'
 import { UploadDialog } from '@/components/Dialogs/UploadDialog'
-
-const user = {
-  avatar: 'https://www.remove.bg/images/samples/combined/s1.jpg',
-  firstName: 'Test',
-  lastName: 'User',
-  email: 'test@example.com'
-}
 
 class UserProfile extends Component {
   static propTypes = {
     classes: PropTypes.object,
-    uploadAvatar: PropTypes.func
+    uploadAvatar: PropTypes.func,
+    loadProfile: PropTypes.func,
+    match: PropTypes.object,
+    user: PropTypes.object
   }
 
   state = {
@@ -42,10 +37,13 @@ class UserProfile extends Component {
     })
   }
 
+  componentDidMount () {
+    this.props.loadProfile(this.props.match.params.id)
+  }
+
   render () {
     return (
-      <PageLayout>
-        <PageHeading>User Profile</PageHeading>
+      <PageLayout title="User Profile">
         <Card>
           <CardContent>
             <Grid
@@ -55,12 +53,12 @@ class UserProfile extends Component {
             >
               <Grid item>
                 <UserAvatar
-                  image={user.avatar}
+                  image={this.props.user.avatar}
                   onUpload={this.onUploadOpenHandler}
                 />
               </Grid>
               <Grid item>
-                <UserInfo user={user} />
+                <UserInfo user={this.props.user} />
               </Grid>
             </Grid>
           </CardContent>
@@ -68,7 +66,7 @@ class UserProfile extends Component {
         <UploadDialog
           open={this.state.uploadAvatar}
           onClose={this.onUploadCloseHandler}
-          onSubmit={this.props.uploadAvatar}
+          onSubmit={() => this.props.uploadAvatar(this.props.match.params.id)}
         />
       </PageLayout>
     )
@@ -76,7 +74,12 @@ class UserProfile extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  uploadAvatar: () => dispatch(uploadAvatar())
+  uploadAvatar: (id) => dispatch(uploadAvatar(id)),
+  loadProfile: (id) => dispatch(loadUserProfile(id))
 })
 
-export default connect(null, mapDispatchToProps)(UserProfile)
+const mapStateToProps = (state) => ({
+  user: state.profile.user
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)

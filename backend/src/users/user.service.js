@@ -75,6 +75,17 @@ async function update (id, userParam) {
   return await user.save()
 }
 
+async function updateAvatar (id, multipart) {
+  const user = await User.findById(id)
+
+  // validate
+  if (!user) throw 'User not found'
+  // copy userParam properties to user
+  // Object.assign(user, {})
+
+  return await user.save()
+}
+
 async function _delete (id) {
   await User.findByIdAndRemove(id)
 }
