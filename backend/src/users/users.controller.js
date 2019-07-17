@@ -63,14 +63,17 @@ function update (req, res, next) {
 }
 
 function updateAvatar (req, res, next) {
-  console.log(req.files);
-  res.status(200).send(req.body)
-  // upload()
-  // userService
-  //   .uploadAvatar(req, res)
-  //   .updateAvar(req.params.id, req.body)
-  //   .then(() => res.status(200).json({}))
-  //   .catch((err) => next(err))
+  if (req.params.id !== req.user.sub) {
+    res.status(403).json({
+      message: 'Access denied'
+    })
+  }
+  else {
+    userService
+      .updateAvatar(req.params.id, req.files[0].filename)
+      .then(() => res.sendStatus(200))
+      .catch((err) => next(err))
+  }
 }
 
 function _delete (req, res, next) {

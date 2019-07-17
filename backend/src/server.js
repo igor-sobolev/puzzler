@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import jwt from './_helpers/jwt'
 import errorHandler from './_helpers/error-handler'
 import UsersController from './users/users.controller'
+import FilesController from './files/files.controller'
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(jwt())
 
 // api routes
 app.use('/users', UsersController)
+app.use('/files', FilesController)
 
 // global error handler
 app.use(errorHandler)

@@ -6,13 +6,14 @@ import db from '../_helpers/db'
 
 const User = db.User
 
-module.exports = {
+export default {
   authenticate,
   getAll,
   getById,
   create,
   update,
-  delete: _delete
+  delete: _delete,
+  updateAvatar
 }
 
 async function authenticate ({ email, password }) {
@@ -75,13 +76,15 @@ async function update (id, userParam) {
   return await user.save()
 }
 
-async function updateAvatar (id, multipart) {
+async function updateAvatar (id, filename) {
   const user = await User.findById(id)
 
   // validate
-  if (!user) throw 'User not found'
+  if (!user) throw 'User was not found'
   // copy userParam properties to user
-  // Object.assign(user, {})
+  Object.assign(user, {
+    avatar: '/files/' + filename
+  })
 
   return await user.save()
 }
