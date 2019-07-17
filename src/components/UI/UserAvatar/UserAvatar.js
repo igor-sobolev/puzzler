@@ -11,7 +11,7 @@ import { colors } from '@material-ui/core'
 const styles = (theme) => ({
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: colors.grey[300],
+    backgroundColor: colors.grey[200],
     width: 200,
     height: 200,
     boxSizing: 'content-box'
@@ -20,8 +20,9 @@ const styles = (theme) => ({
     position: 'relative'
   },
   image: {
-    objectFit: 'contain',
-    maxHeight: '100%'
+    objectFit: 'cover',
+    minHeight: '100%',
+    maxWidth: '100%'
   },
   uploadBtn: {
     position: 'absolute',
@@ -36,11 +37,27 @@ const styles = (theme) => ({
   },
   personIcon: {
     width: 100,
-    height: 100
+    height: 100,
+    color: '#aaa'
   }
 })
 
 const UserProfile = (props) => {
+  const uploadBtn = props.isCurrentUser ? (
+    <Tooltip title="Upload avatar">
+      <Fab
+        edge="start"
+        className={props.classes.uploadBtn}
+        color="primary"
+        aria-label="Open drawer"
+        onClick={props.onUpload}
+        size="small"
+      >
+        <PhotoIcon className={props.classes.uploadIcon} />
+      </Fab>
+    </Tooltip>
+  ) : null
+
   return (
     <div className={props.classes.avatarContainer}>
       <Avatar className={props.classes.avatar}>
@@ -54,18 +71,7 @@ const UserProfile = (props) => {
           <PersonIcon className={props.classes.personIcon} />
         )}
       </Avatar>
-      <Tooltip title="Upload avatar">
-        <Fab
-          edge="start"
-          className={props.classes.uploadBtn}
-          color="primary"
-          aria-label="Open drawer"
-          onClick={props.onUpload}
-          size="small"
-        >
-          <PhotoIcon className={props.classes.uploadIcon} />
-        </Fab>
-      </Tooltip>
+      {uploadBtn}
     </div>
   )
 }
@@ -73,7 +79,8 @@ const UserProfile = (props) => {
 UserProfile.propTypes = {
   classes: PropTypes.object,
   image: PropTypes.string,
-  onUpload: PropTypes.func
+  onUpload: PropTypes.func,
+  isCurrentUser: PropTypes.bool
 }
 
 export default withStyles(styles)(UserProfile)

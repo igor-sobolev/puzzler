@@ -1,7 +1,7 @@
 import { stopSubmit, startSubmit } from 'redux-form'
+
 import * as actionTypes from './actionTypes'
 import ProfileAPI from '@/api/ProfileAPI'
-// import { push } from 'connected-react-router'
 
 const uploadFormName = 'UploadForm'
 
@@ -9,6 +9,18 @@ const saveUserProfile = (data) => {
   return {
     type: actionTypes.SAVE_USER_PROFILE,
     ...data
+  }
+}
+
+export const openUploadAvatarDialog = () => {
+  return {
+    type: actionTypes.OPEN_UPLOAD_AVATAR_DIALOG
+  }
+}
+
+export const closeUploadAvatarDialog = () => {
+  return {
+    type: actionTypes.CLOSE_UPLOAD_AVATAR_DIALOG
   }
 }
 
@@ -20,9 +32,9 @@ export const uploadAvatar = (id) => {
     })
     dispatch(startSubmit(uploadFormName))
     try {
-      let response = await ProfileAPI.uploadAvatar(id, formData)
-      let profile = response.data
-      // dispatch(saveUserProfile({ profile }))
+      await ProfileAPI.uploadAvatar(id, formData)
+      dispatch(closeUploadAvatarDialog())
+      dispatch(loadUserProfile(id))
     } finally {
       dispatch(stopSubmit(uploadFormName))
     }

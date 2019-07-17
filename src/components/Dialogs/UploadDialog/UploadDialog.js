@@ -27,7 +27,7 @@ export const UploadDialog = (props) => {
       <DialogContent className={classes.content}>
         <UploadForm
           handleCancel={props.onClose}
-          handleSubmit={props.onSubmit}
+          handleSubmit={props.handleSubmit}
         />
       </DialogContent>
     </Dialog>
@@ -36,5 +36,5 @@ export const UploadDialog = (props) => {
 
 UploadDialog.propTypes = {
   onClose: PropTypes.func,
-  onSubmit: PropTypes.func
+  handleSubmit: PropTypes.func
 }

@@ -6,5 +6,7 @@ export {
 
 export {
   uploadAvatar,
-  loadUserProfile
+  loadUserProfile,
+  openUploadAvatarDialog,
+  closeUploadAvatarDialog
 } from './profile'

@@ -15,7 +15,8 @@ class UploadForm extends Component {
     handleCancel: PropTypes.func,
     reset: PropTypes.func,
     invalid: PropTypes.bool,
-    pristine: PropTypes.bool
+    pristine: PropTypes.bool,
+    submitting: PropTypes.bool
   }
 
   onSubmitHandler = (e) => {
@@ -60,7 +61,7 @@ class UploadForm extends Component {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={this.props.pristine || this.props.invalid}
+              disabled={this.props.pristine || this.props.invalid || this.props.submitting}
             >
               Upload
             </Button>

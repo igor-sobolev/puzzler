@@ -5,12 +5,20 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import { connect } from 'react-redux'
 
-import { uploadAvatar, loadUserProfile } from '@/store/actions'
+import config from '@/properties'
+import {
+  uploadAvatar,
+  loadUserProfile,
+  openUploadAvatarDialog,
+  closeUploadAvatarDialog
+} from '@/store/actions'
 
 import { UserAvatar } from '@/components/UI/UserAvatar'
 import { PageLayout } from '@/components/UI/PageLayout'
 import { UserInfo } from '@/components/UI/UserInfo'
 import { UploadDialog } from '@/components/Dialogs/UploadDialog'
+
+const { SERVER_URL } = config
 
 class UserProfile extends Component {
   static propTypes = {
@@ -18,27 +26,27 @@ class UserProfile extends Component {
     uploadAvatar: PropTypes.func,
     loadProfile: PropTypes.func,
     match: PropTypes.object,
-    user: PropTypes.object
-  }
-
-  state = {
-    uploadAvatar: false
-  }
-
-  onUploadOpenHandler = () => {
-    this.setState({
-      uploadAvatar: true
-    })
-  }
-
-  onUploadCloseHandler = () => {
-    this.setState({
-      uploadAvatar: false
-    })
+    user: PropTypes.object,
+    authenticatedUser: PropTypes.object,
+    showUploadAvatarDialog: PropTypes.bool,
+    openUploadAvatarDialog: PropTypes.func,
+    closeUploadAvatarDialog: PropTypes.func
   }
 
   componentDidMount () {
     this.props.loadProfile(this.props.match.params.id)
+  }
+
+  resolveAvatar = () => {
+    return this.props.user.avatar ? SERVER_URL + this.props.user.avatar : null
+  }
+
+  isCurrentUser = () => {
+    return (
+      this.props.authenticatedUser &&
+      this.props.authenticatedUser._id &&
+      this.props.authenticatedUser._id === this.props.user._id
+    )
   }
 
   render () {
@@ -53,20 +61,24 @@ class UserProfile extends Component {
             >
               <Grid item>
                 <UserAvatar
-                  image={this.props.user.avatar}
-                  onUpload={this.onUploadOpenHandler}
+                  image={this.resolveAvatar()}
+                  onUpload={this.props.openUploadAvatarDialog}
+                  isCurrentUser={this.isCurrentUser()}
                 />
               </Grid>
               <Grid item>
-                <UserInfo user={this.props.user} />
+                <UserInfo
+                  user={this.props.user}
+                  isCurrentUser={this.isCurrentUser()}
+                />
               </Grid>
             </Grid>
           </CardContent>
         </Card>
         <UploadDialog
-          open={this.state.uploadAvatar}
-          onClose={this.onUploadCloseHandler}
-          onSubmit={() => this.props.uploadAvatar(this.props.match.params.id)}
+          open={this.props.showUploadAvatarDialog}
+          onClose={this.props.closeUploadAvatarDialog}
+          handleSubmit={() => this.props.uploadAvatar(this.props.match.params.id)}
         />
       </PageLayout>
     )
@@ -74,12 +86,22 @@ class UserProfile extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  uploadAvatar: (id) => dispatch(uploadAvatar(id)),
-  loadProfile: (id) => dispatch(loadUserProfile(id))
+  uploadAvatar: (id) => {
+    console.log('dispatch')
+    dispatch(uploadAvatar(id))
+  },
+  loadProfile: (id) => dispatch(loadUserProfile(id)),
+  openUploadAvatarDialog: () => dispatch(openUploadAvatarDialog()),
+  closeUploadAvatarDialog: () => dispatch(closeUploadAvatarDialog())
 })
 
 const mapStateToProps = (state) => ({
-  user: state.profile.user
+  user: state.profile.user,
+  showUploadAvatarDialog: state.profile.uploadAvatar,
+  authenticatedUser: state.auth.user
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UserProfile)
