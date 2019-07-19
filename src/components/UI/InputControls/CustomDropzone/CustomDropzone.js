@@ -85,6 +85,7 @@ export const CustomDropzone = (props) => {
                       key={index}
                       src={thumbnail(file)}
                       className={classes.previewImage}
+                      alt="preview"
                     />
                   ))}
                   <Fab

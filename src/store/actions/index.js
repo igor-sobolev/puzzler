@@ -1,12 +1,3 @@
-export {
-  logIn,
-  logOut,
-  register
-} from './auth'
+export * from './auth'
 
-export {
-  uploadAvatar,
-  loadUserProfile,
-  openUploadAvatarDialog,
-  closeUploadAvatarDialog
-} from './profile'
+export * from './profile'

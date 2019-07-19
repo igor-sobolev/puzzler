@@ -3,7 +3,7 @@ import { stopSubmit, startSubmit } from 'redux-form'
 import * as actionTypes from './actionTypes'
 import ProfileAPI from '@/api/ProfileAPI'
 
-const uploadFormName = 'UploadForm'
+import { EDIT_USER_FORM_NAME, UPLOAD_FORM_NAME } from '@/enum/forms.enum'
 
 const saveUserProfile = (data) => {
   return {
@@ -24,19 +24,45 @@ export const closeUploadAvatarDialog = () => {
   }
 }
 
+export const startEditProfile = () => {
+  return {
+    type: actionTypes.START_EDIT_PROFILE
+  }
+}
+
+export const endEditProfile = () => {
+  return {
+    type: actionTypes.END_EDIT_PROFILE
+  }
+}
+
 export const uploadAvatar = (id) => {
   return async (dispatch, getState) => {
     const formData = new FormData()
     getState().form.UploadForm.values.files.forEach(file => {
       formData.append('files', file)
     })
-    dispatch(startSubmit(uploadFormName))
+    dispatch(startSubmit(UPLOAD_FORM_NAME))
     try {
       await ProfileAPI.uploadAvatar(id, formData)
       dispatch(closeUploadAvatarDialog())
       dispatch(loadUserProfile(id))
     } finally {
-      dispatch(stopSubmit(uploadFormName))
+      dispatch(stopSubmit(UPLOAD_FORM_NAME))
+    }
+  }
+}
+
+export const updateUser = (data) => {
+  return async (dispatch, getState) => {
+    
+    dispatch(startSubmit(EDIT_USER_FORM_NAME))
+    try {
+      //await ProfileAPI.uploadAvatar(id, formData)
+      dispatch(loadUserProfile(data.id))
+      dispatch(endEditProfile())
+    } finally {
+      dispatch(stopSubmit(EDIT_USER_FORM_NAME))
     }
   }
 }

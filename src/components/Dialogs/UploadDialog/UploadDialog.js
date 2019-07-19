@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-import { UploadForm } from '@/containers/UploadForm'
+import { UploadForm } from '@/containers/Forms/UploadForm'
 import { DialogContent } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 

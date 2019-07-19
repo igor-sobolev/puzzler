@@ -12,8 +12,8 @@ const styles = (theme) => ({
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: colors.grey[200],
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     boxSizing: 'content-box'
   },
   avatarContainer: {
@@ -29,7 +29,12 @@ const styles = (theme) => ({
     zIndex: 1,
     top: 'calc(100%)',
     left: '50%',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(-50%, -70%)',
+    color: 'white',
+    backgroundColor: theme.palette.primary.light,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main
+    }
   },
   uploadIcon: {
     width: 20,
@@ -43,12 +48,11 @@ const styles = (theme) => ({
 })
 
 const UserProfile = (props) => {
-  const uploadBtn = props.isCurrentUser ? (
+  const uploadBtn = props.isCurrentUser && props.edit ? (
     <Tooltip title="Upload avatar">
       <Fab
         edge="start"
         className={props.classes.uploadBtn}
-        color="primary"
         aria-label="Open drawer"
         onClick={props.onUpload}
         size="small"
@@ -80,7 +84,8 @@ UserProfile.propTypes = {
   classes: PropTypes.object,
   image: PropTypes.string,
   onUpload: PropTypes.func,
-  isCurrentUser: PropTypes.bool
+  isCurrentUser: PropTypes.bool,
+  edit: PropTypes.bool
 }
 
 export default withStyles(styles)(UserProfile)
