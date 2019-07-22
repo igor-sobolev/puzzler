@@ -12,6 +12,10 @@ class ProfileAPI {
   static loadUserProfile (id) {
     return axios.get(`/users/${id}`)
   }
+
+  static updateUserProfile (id, data) {
+    return axios.put(`/users/${id}`, data)
+  }
 }
 
 export default ProfileAPI

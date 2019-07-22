@@ -53,13 +53,13 @@ export const uploadAvatar = (id) => {
   }
 }
 
-export const updateUser = (data) => {
+export const updateUserProfile = (id) => {
   return async (dispatch, getState) => {
-    
+    const formData = getState().form[EDIT_USER_FORM_NAME].values
     dispatch(startSubmit(EDIT_USER_FORM_NAME))
     try {
-      //await ProfileAPI.uploadAvatar(id, formData)
-      dispatch(loadUserProfile(data.id))
+      await ProfileAPI.updateUserProfile(id, formData)
+      dispatch(loadUserProfile(id))
       dispatch(endEditProfile())
     } finally {
       dispatch(stopSubmit(EDIT_USER_FORM_NAME))

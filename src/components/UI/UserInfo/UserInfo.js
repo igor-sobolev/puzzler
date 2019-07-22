@@ -31,6 +31,7 @@ const UserProfile = (props) => {
         lastName={props.user.lastName}
         email={props.user.email}
         handleCancel={props.handleCancel}
+        handleSubmit={props.handleSubmit}
       />
     </Grid>
   ) : (
@@ -68,7 +69,8 @@ const UserProfile = (props) => {
 UserProfile.propTypes = {
   user: PropTypes.object,
   edit: PropTypes.bool,
-  handleCancel: PropTypes.func
+  handleCancel: PropTypes.func,
+  handleSubmit: PropTypes.func
 }
 
 export default UserProfile

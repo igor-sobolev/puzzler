@@ -7,7 +7,6 @@ import { CustomTextField } from '@/components/UI/InputControls/CustomTextField'
 import { validator as validate } from './validator'
 import { connect } from 'react-redux'
 
-import { updateUser } from '@/store/actions'
 import { Button } from '@material-ui/core'
 
 import { EDIT_USER_FORM_NAME } from '@/enum/forms.enum'
@@ -48,9 +47,17 @@ class EditUserForm extends Component {
     })
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault()
+    this.props.handleSubmit(e)
+  }
+
   render () {
     return (
-      <form className={this.props.classes.form}>
+      <form
+        className={this.props.classes.form}
+        onSubmit={this.handleSubmit}
+      >
         <Field
           margin="normal"
           required
@@ -102,7 +109,6 @@ class EditUserForm extends Component {
             variant="contained"
             color="primary"
             className={this.props.classes.btn}
-            onClick={this.props.handleSubmit}
             size="small"
           >
             Save
@@ -114,11 +120,7 @@ class EditUserForm extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  initialize: (data) => dispatch(initialize(EDIT_USER_FORM_NAME, data)),
-  handleSubmit: (e) => {
-    e.preventDefault()
-    dispatch(updateUser())
-  }
+  initialize: (data) => dispatch(initialize(EDIT_USER_FORM_NAME, data))
 })
 
 export default connect(

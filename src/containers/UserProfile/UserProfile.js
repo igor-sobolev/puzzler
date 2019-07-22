@@ -17,7 +17,8 @@ import {
   openUploadAvatarDialog,
   closeUploadAvatarDialog,
   startEditProfile,
-  endEditProfile
+  endEditProfile,
+  updateUserProfile
 } from '@/store/actions'
 
 import { UserAvatar } from '@/components/UI/UserAvatar'
@@ -61,7 +62,8 @@ class UserProfile extends Component {
     closeUploadAvatarDialog: PropTypes.func,
     handleEditStart: PropTypes.func,
     handleEditEnd: PropTypes.func,
-    edit: PropTypes.bool
+    edit: PropTypes.bool,
+    updateUserProfile: PropTypes.func
   }
 
   componentDidMount () {
@@ -108,6 +110,7 @@ class UserProfile extends Component {
                     user={this.props.user}
                     isCurrentUser={this.isCurrentUser()}
                     handleCancel={this.props.handleEditEnd}
+                    handleSubmit={() => this.props.updateUserProfile(this.props.user.id)}
                   />
                 </Grid>
               </Grid>
@@ -142,7 +145,8 @@ const mapDispatchToProps = (dispatch) => ({
   openUploadAvatarDialog: () => dispatch(openUploadAvatarDialog()),
   closeUploadAvatarDialog: () => dispatch(closeUploadAvatarDialog()),
   handleEditStart: () => dispatch(startEditProfile()),
-  handleEditEnd: () => dispatch(endEditProfile())
+  handleEditEnd: () => dispatch(endEditProfile()),
+  updateUserProfile: (id) => dispatch(updateUserProfile(id))
 })
 
 const mapStateToProps = (state) => ({
