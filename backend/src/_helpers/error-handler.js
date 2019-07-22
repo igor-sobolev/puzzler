@@ -1,5 +1,4 @@
-export default function errorHandler (err, req, res/*, next*/) {
-  console.error('wtf', err);
+export default function errorHandler (err, req, res, next) {
 
   if (typeof err === 'string') {
     // custom application error

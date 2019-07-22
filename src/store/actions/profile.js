@@ -2,6 +2,7 @@ import { stopSubmit, startSubmit } from 'redux-form'
 
 import * as actionTypes from './actionTypes'
 import ProfileAPI from '@/api/ProfileAPI'
+import toastService from '@/services/toastService'
 
 import { EDIT_USER_FORM_NAME, UPLOAD_FORM_NAME } from '@/enum/forms.enum'
 
@@ -46,6 +47,7 @@ export const uploadAvatar = (id) => {
     try {
       await ProfileAPI.uploadAvatar(id, formData)
       dispatch(closeUploadAvatarDialog())
+      toastService.success('Successfuly uploaded avatar')
       dispatch(loadUserProfile(id))
     } finally {
       dispatch(stopSubmit(UPLOAD_FORM_NAME))
@@ -53,13 +55,14 @@ export const uploadAvatar = (id) => {
   }
 }
 
-export const updateUserProfile = (id) => {
+export const updateUserProfile = () => {
   return async (dispatch, getState) => {
     const formData = getState().form[EDIT_USER_FORM_NAME].values
     dispatch(startSubmit(EDIT_USER_FORM_NAME))
     try {
-      await ProfileAPI.updateUserProfile(id, formData)
-      dispatch(loadUserProfile(id))
+      await ProfileAPI.updateUserProfile(formData._id, formData)
+      toastService.success('Successfuly updated profile')
+      dispatch(loadUserProfile(formData._id))
       dispatch(endEditProfile())
     } finally {
       dispatch(stopSubmit(EDIT_USER_FORM_NAME))

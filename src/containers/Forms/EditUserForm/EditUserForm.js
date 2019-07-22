@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Field, reduxForm, initialize } from 'redux-form'
 import { createStyles, withStyles } from '@material-ui/core/styles'
+import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 import { CustomTextField } from '@/components/UI/InputControls/CustomTextField'
 import { validator as validate } from './validator'
-import { connect } from 'react-redux'
 
-import { Button } from '@material-ui/core'
+import { updateUserProfile } from '@/store/actions'
 
 import { EDIT_USER_FORM_NAME } from '@/enum/forms.enum'
 
@@ -30,26 +31,22 @@ const styles = createStyles((theme) => ({
 
 class EditUserForm extends Component {
   static propTypes = {
-    firstName: PropTypes.string,
-    email: PropTypes.string,
-    lastName: PropTypes.string,
+    user: PropTypes.object,
     initialize: PropTypes.func,
-    handleSubmit: PropTypes.func,
+    send: PropTypes.func,
     handleCancel: PropTypes.func,
     classes: PropTypes.object
   }
 
   componentDidMount () {
     this.props.initialize({
-      firstName: this.props.firstName,
-      lastName: this.props.lastName,
-      email: this.props.email
+      ...this.props.user
     })
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.handleSubmit(e)
+    this.props.send()
   }
 
   render () {
@@ -59,13 +56,20 @@ class EditUserForm extends Component {
         onSubmit={this.handleSubmit}
       >
         <Field
+          id="userId"
+          name="_id"
+          value={this.props.user._id}
+          component={CustomTextField}
+          type="hidden"
+        />
+        <Field
           margin="normal"
           required
           fullWidth
           id="firstName"
           label="First name"
           name="firstName"
-          value={this.props.firstName}
+          value={this.props.user.firstName}
           autoComplete="firstName"
           component={CustomTextField}
           className={this.props.classes.field}
@@ -76,7 +80,7 @@ class EditUserForm extends Component {
           fullWidth
           name="lastName"
           label="Last name"
-          value={this.props.lastName}
+          value={this.props.user.lastName}
           id="lastName"
           autoComplete="lastName"
           component={CustomTextField}
@@ -88,7 +92,7 @@ class EditUserForm extends Component {
           fullWidth
           name="email"
           label="Email"
-          value={this.props.email}
+          value={this.props.user.email}
           id="email"
           autoComplete="email"
           component={CustomTextField}
@@ -120,7 +124,8 @@ class EditUserForm extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  initialize: (data) => dispatch(initialize(EDIT_USER_FORM_NAME, data))
+  initialize: (data) => dispatch(initialize(EDIT_USER_FORM_NAME, data)),
+  send: () => dispatch(updateUserProfile())
 })
 
 export default connect(

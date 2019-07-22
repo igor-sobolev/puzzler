@@ -36,7 +36,6 @@ const LoginForm = (props) => {
         label="Email Address"
         name="email"
         autoComplete="email"
-        autoFocus
         component={CustomTextField}
       />
       <Field

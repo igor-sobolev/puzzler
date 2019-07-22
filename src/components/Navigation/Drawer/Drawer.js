@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
 import Drawer from '@material-ui/core/Drawer'
 
@@ -63,8 +62,4 @@ NavigationDrawer.propTypes = {
   authenticatedUser: PropTypes.object
 }
 
-const mapStateToProps = (state) => ({
-  authenticatedUser: state.auth.user
-})
-
-export default connect(mapStateToProps)(NavigationDrawer)
+export default NavigationDrawer

@@ -48,7 +48,7 @@ const styles = (theme) => ({
 })
 
 const UserProfile = (props) => {
-  const uploadBtn = props.isCurrentUser && props.edit ? (
+  const uploadBtn = props.isCurrentUser ? (
     <Tooltip title="Upload avatar">
       <Fab
         edge="start"
@@ -84,8 +84,7 @@ UserProfile.propTypes = {
   classes: PropTypes.object,
   image: PropTypes.string,
   onUpload: PropTypes.func,
-  isCurrentUser: PropTypes.bool,
-  edit: PropTypes.bool
+  isCurrentUser: PropTypes.bool
 }
 
 export default withStyles(styles)(UserProfile)

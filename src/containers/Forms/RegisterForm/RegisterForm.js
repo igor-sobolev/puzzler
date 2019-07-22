@@ -37,7 +37,6 @@ const RegisterForm = (props) => {
         label="Email Address"
         name="email"
         autoComplete="email"
-        autoFocus
         component={CustomTextField}
       />
       <Grid

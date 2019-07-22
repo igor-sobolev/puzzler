@@ -56,6 +56,11 @@ function getById (req, res, next) {
 }
 
 function update (req, res, next) {
+  if (req.params.id !== req.user.sub) {
+    res.status(403).json({
+      message: 'Access denied'
+    })
+  }
   userService
     .update(req.params.id, req.body)
     .then(() => res.json({}))

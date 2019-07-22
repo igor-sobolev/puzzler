@@ -27,11 +27,8 @@ const UserProfile = (props) => {
   const profile = props.edit ? (
     <Grid item>
       <EditUserForm
-        firstName={props.user.firstName}
-        lastName={props.user.lastName}
-        email={props.user.email}
+        user={props.user}
         handleCancel={props.handleCancel}
-        handleSubmit={props.handleSubmit}
       />
     </Grid>
   ) : (

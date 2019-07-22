@@ -46,6 +46,7 @@ class App extends Component {
           <Drawer
             show={this.state.openDrawer}
             onClose={this.onDrawerToggleHandler}
+            authenticatedUser={this.props.currentUser}
           />
           <Container
             component="main"

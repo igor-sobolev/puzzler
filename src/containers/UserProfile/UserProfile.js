@@ -17,8 +17,7 @@ import {
   openUploadAvatarDialog,
   closeUploadAvatarDialog,
   startEditProfile,
-  endEditProfile,
-  updateUserProfile
+  endEditProfile
 } from '@/store/actions'
 
 import { UserAvatar } from '@/components/UI/UserAvatar'
@@ -83,6 +82,16 @@ class UserProfile extends Component {
   }
 
   render () {
+    const editBtn =
+      !this.props.edit && this.isCurrentUser() ? (
+        <Fab
+          size="small"
+          className={this.props.classes.editBtn}
+          onClick={this.props.handleEditStart}
+        >
+          <EditIcon />
+        </Fab>
+      ) : null
     return (
       <PageLayout title="User Profile">
         <Card className={this.props.classes.profileCard}>
@@ -99,7 +108,6 @@ class UserProfile extends Component {
                 <Grid item>
                   <UserAvatar
                     image={this.resolveAvatar()}
-                    edit={this.props.edit}
                     onUpload={this.props.openUploadAvatarDialog}
                     isCurrentUser={this.isCurrentUser()}
                   />
@@ -110,21 +118,12 @@ class UserProfile extends Component {
                     user={this.props.user}
                     isCurrentUser={this.isCurrentUser()}
                     handleCancel={this.props.handleEditEnd}
-                    handleSubmit={() => this.props.updateUserProfile(this.props.user.id)}
                   />
                 </Grid>
               </Grid>
             </Container>
           </CardContent>
-          {this.props.edit ? null : (
-            <Fab
-              size="small"
-              className={this.props.classes.editBtn}
-              onClick={this.props.handleEditStart}
-            >
-              <EditIcon />
-            </Fab>
-          )}
+          {editBtn}
         </Card>
         <UploadDialog
           open={this.props.showUploadAvatarDialog}
@@ -145,8 +144,7 @@ const mapDispatchToProps = (dispatch) => ({
   openUploadAvatarDialog: () => dispatch(openUploadAvatarDialog()),
   closeUploadAvatarDialog: () => dispatch(closeUploadAvatarDialog()),
   handleEditStart: () => dispatch(startEditProfile()),
-  handleEditEnd: () => dispatch(endEditProfile()),
-  updateUserProfile: (id) => dispatch(updateUserProfile(id))
+  handleEditEnd: () => dispatch(endEditProfile())
 })
 
 const mapStateToProps = (state) => ({
