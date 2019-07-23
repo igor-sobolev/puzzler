@@ -1,1 +1,2 @@
-export { Puzzles } from './Puzzles'
+import Puzzles from './Puzzles'
+export { Puzzles }

@@ -7,6 +7,7 @@ import jwt from './_helpers/jwt'
 import errorHandler from './_helpers/error-handler'
 import UsersController from './users/users.controller'
 import FilesController from './files/files.controller'
+import PuzzlesController from './puzzles/puzzles.controller'
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use(jwt())
 // api routes
 app.use('/users', UsersController)
 app.use('/files', FilesController)
+app.use('/puzzles', PuzzlesController)
 
 // global error handler
 app.use(errorHandler)

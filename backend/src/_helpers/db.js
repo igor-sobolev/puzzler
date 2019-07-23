@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 import config from '../config.json'
 import User from '../users/user.model'
+import Puzzle, { PuzzleVote } from '../puzzles/puzzle.model'
 
 mongoose.connect(process.env.MONGODB_URI || config.connectionString, {
   useCreateIndex: true,
@@ -11,5 +12,7 @@ mongoose.connect(process.env.MONGODB_URI || config.connectionString, {
 mongoose.Promise = global.Promise
 
 export default {
-  User
+  User,
+  Puzzle,
+  PuzzleVote
 }

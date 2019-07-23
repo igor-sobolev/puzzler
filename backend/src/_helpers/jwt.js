@@ -1,7 +1,7 @@
 import expressJwt from 'express-jwt'
 
 import config from '../config.json'
-import userService from '../users/user.service'
+import userService from '../users/users.service'
 
 export default function jwt () {
   const secret = config.secret

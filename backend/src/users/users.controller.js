@@ -1,5 +1,5 @@
 ﻿import express from 'express'
-import userService from './user.service'
+import usersService from './users.service'
 import { upload } from '../storage'
 
 const router = express.Router()
@@ -15,7 +15,7 @@ router.put('/:id/avatar', upload.array('files'), updateAvatar)
 router.delete('/:id', _delete)
 
 function authenticate (req, res, next) {
-  userService
+  usersService
     .authenticate(req.body)
     .then((user) => {
       return user
@@ -26,7 +26,7 @@ function authenticate (req, res, next) {
 }
 
 function register (req, res) {
-  userService
+  usersService
     .create(req.body)
     .then(() => {
       return res.status(200).json({})
@@ -35,21 +35,21 @@ function register (req, res) {
 }
 
 function getAll (req, res, next) {
-  userService
+  usersService
     .getAll()
     .then((users) => res.json(users))
     .catch((err) => next(err))
 }
 
 function getCurrent (req, res, next) {
-  userService
+  usersService
     .getById(req.user.sub)
     .then((user) => (user ? res.json(user) : res.sendStatus(404)))
     .catch((err) => next(err))
 }
 
 function getById (req, res, next) {
-  userService
+  usersService
     .getById(req.params.id)
     .then((user) => (user ? res.json(user) : res.sendStatus(404)))
     .catch((err) => next(err))
@@ -61,7 +61,7 @@ function update (req, res, next) {
       message: 'Access denied'
     })
   }
-  userService
+  usersService
     .update(req.params.id, req.body)
     .then(() => res.json({}))
     .catch((err) => next(err))
@@ -74,7 +74,7 @@ function updateAvatar (req, res, next) {
     })
   }
   else {
-    userService
+    usersService
       .updateAvatar(req.params.id, req.files[0].filename)
       .then(() => res.sendStatus(200))
       .catch((err) => next(err))
@@ -82,7 +82,7 @@ function updateAvatar (req, res, next) {
 }
 
 function _delete (req, res, next) {
-  userService
+  usersService
     .delete(req.params.id)
     .then(() => res.json({}))
     .catch((err) => next(err))
