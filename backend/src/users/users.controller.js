@@ -1,6 +1,7 @@
 ﻿import express from 'express'
 import usersService from './users.service'
 import { upload } from '../storage'
+import { currentUserOnly } from '../_helpers/jwt'
 
 const router = express.Router()
 
@@ -9,10 +10,10 @@ router.post('/authenticate', authenticate)
 router.post('/register', register)
 router.get('/', getAll)
 router.get('/current', getCurrent)
-router.get('/:id', getById)
-router.put('/:id', update)
-router.put('/:id/avatar', upload.array('files'), updateAvatar)
-router.delete('/:id', _delete)
+router.get('/:userId', getById)
+router.put('/:userId', currentUserOnly, update)
+router.put('/:userId/avatar', currentUserOnly, upload.array('files'), updateAvatar)
+router.delete('/:userId', _delete)
 
 function authenticate (req, res, next) {
   usersService
@@ -50,40 +51,28 @@ function getCurrent (req, res, next) {
 
 function getById (req, res, next) {
   usersService
-    .getById(req.params.id)
+    .getById(req.params.userId)
     .then((user) => (user ? res.json(user) : res.sendStatus(404)))
     .catch((err) => next(err))
 }
 
 function update (req, res, next) {
-  if (req.params.id !== req.user.sub) {
-    res.status(403).json({
-      message: 'Access denied'
-    })
-  }
   usersService
-    .update(req.params.id, req.body)
+    .update(req.params.userId, req.body)
     .then(() => res.json({}))
     .catch((err) => next(err))
 }
 
 function updateAvatar (req, res, next) {
-  if (req.params.id !== req.user.sub) {
-    res.status(403).json({
-      message: 'Access denied'
-    })
-  }
-  else {
-    usersService
-      .updateAvatar(req.params.id, req.files[0].filename)
-      .then(() => res.sendStatus(200))
-      .catch((err) => next(err))
-  }
+  usersService
+    .updateAvatar(req.params.userId, req.files[0].filename)
+    .then(() => res.sendStatus(200))
+    .catch((err) => next(err))
 }
 
 function _delete (req, res, next) {
   usersService
-    .delete(req.params.id)
+    .delete(req.params.userId)
     .then(() => res.json({}))
     .catch((err) => next(err))
 }

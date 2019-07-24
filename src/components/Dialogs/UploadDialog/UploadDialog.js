@@ -19,7 +19,8 @@ export const UploadDialog = (props) => {
   const classes = useStyles()
   return (
     <Dialog
-      {...props}
+      open={props.open}
+      onClose={props.onClose}
       maxWidth="xs"
       fullWidth
     >
@@ -36,5 +37,6 @@ export const UploadDialog = (props) => {
 
 UploadDialog.propTypes = {
   onClose: PropTypes.func,
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
+  open: PropTypes.bool
 }
