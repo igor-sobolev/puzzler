@@ -136,10 +136,7 @@ class UserProfile extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  uploadAvatar: (id) => {
-    console.log('dispatch')
-    dispatch(uploadAvatar(id))
-  },
+  uploadAvatar: (id) => dispatch(uploadAvatar(id)),
   loadProfile: (id) => dispatch(loadUserProfile(id)),
   openUploadAvatarDialog: () => dispatch(openUploadAvatarDialog()),
   closeUploadAvatarDialog: () => dispatch(closeUploadAvatarDialog()),

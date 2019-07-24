@@ -7,7 +7,8 @@ const router = express.Router()
 // routes
 router.get('/', getAll)
 // router.get('/current', getCurrentUserPuzzles)
-// router.get('/:id', getById)
+router.get('/:puzzleId', getById)
+router.post('/:puzzleId/vote', vote)
 // router.put('/:id', update)
 // router.delete('/:id', _delete)
 
@@ -18,6 +19,13 @@ function getAll (req, res, next) {
     .catch((err) => next(err))
 }
 
+function vote (req, res, next) {
+  puzzlesService
+    .vote(req.params.puzzleId, req.user.sub, req.body.rating)
+    .then(() => res.json({}))
+    .catch((err) => next(err))
+}
+
 // function getCurrentUserPuzzles (req, res, next) {
 //   puzzlesService
 //     .getById(req.user.sub)
@@ -25,12 +33,12 @@ function getAll (req, res, next) {
 //     .catch((err) => next(err))
 // }
 
-// function getById (req, res, next) {
-//   puzzlesService
-//     .getById(req.params.id)
-//     .then((user) => (user ? res.json(user) : res.sendStatus(404)))
-//     .catch((err) => next(err))
-// }
+function getById (req, res, next) {
+  puzzlesService
+    .getById(req.params.puzzleId)
+    .then((puzzle) => (puzzle ? res.json(puzzle) : res.sendStatus(404)))
+    .catch((err) => next(err))
+}
 
 // function update (req, res, next) {
 //   if (req.params.id !== req.user.sub) {

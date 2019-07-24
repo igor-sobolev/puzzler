@@ -8,14 +8,41 @@ const Puzzle = db.Puzzle
 const PuzzleVote = db.PuzzleVote
 
 export default {
-  getAll
-  // getById,
+  getAll,
+  getById,
+  vote
   // create,
   // update,
   // delete: _delete
 }
 
+async function vote (puzzleId, userId, rating) {
+  let userVote = await PuzzleVote.findOne({
+    author: userId,
+    puzzle: puzzleId
+  })
+  console.log('user vote: ', userVote);
+  if (userVote) {
+    userVote.rating = rating
+  } else {
+    userVote = new PuzzleVote({
+      author: userId,
+      rating: rating,
+      puzzle: puzzleId
+    })
+  }
+  return await userVote.save()
+}
+
 async function getAll () {
+  return await aggregateAllAndPopulate()
+}
+
+async function getById (id) {
+  return await aggregateAllAndPopulate().findById(id)
+}
+
+async function aggregateAllAndPopulate () {
   let aggregated = await Puzzle.aggregate([
     {
       $lookup: {
@@ -39,7 +66,7 @@ async function getAll () {
     }
   ])
 
-  return await Puzzle.populate(aggregated, { path: 'author' })
+  return Puzzle.populate(aggregated, { path: 'author' })
 }
 
 // async function getById (id) {
