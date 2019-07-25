@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, Divider } from '@material-ui/core'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   Card,
   Typography,
@@ -43,11 +43,19 @@ const useStyles = makeStyles((theme) => ({
 
 export const PuzzleCard = (props) => {
   const classes = useStyles()
+  const handleRatingChange = (value) => {
+    props.handleVote({ puzzleId: props.puzzle._id, rating: value })
+  }
+
   return (
-    <Card>
+    <Card component="div">
       <Box className={classes.headingContainer}>
         <Box className={classes.rating}>
-          <Rating rating={props.puzzle.rating} />
+          <Rating
+            rating={props.puzzle.rating}
+            initial={props.puzzle.votedValue}
+            handleChange={handleRatingChange}
+          />
         </Box>
         <CardMedia
           component="img"
@@ -71,22 +79,29 @@ export const PuzzleCard = (props) => {
           variant="subtitle1"
         >
           Author:&nbsp;
-          <NavLink to={`/users/${props.puzzle.author._id}`} className={classes.profileLink}>
+          <Link
+            to={`/users/${props.puzzle.author._id}`}
+            className={classes.profileLink}
+          >
             {props.puzzle.author.firstName} {props.puzzle.author.lastName}
-          </NavLink>
+          </Link>
         </Typography>
       </CardContent>
       <Divider />
       <CardActions className={classes.buttons}>
+        <Link to={`/puzzles/${props.puzzle._id}`}>
+          <Button
+            size="small"
+            color="primary"
+          >
+            View more
+          </Button>
+        </Link>
+
         <Button
           size="small"
           color="primary"
-        >
-          View more
-        </Button>
-        <Button
-          size="small"
-          color="primary"
+          variant="contained"
         >
           Try it now!
         </Button>
@@ -96,5 +111,6 @@ export const PuzzleCard = (props) => {
 }
 
 PuzzleCard.propTypes = {
-  puzzle: PropTypes.object
+  puzzle: PropTypes.object,
+  handleVote: PropTypes.func
 }

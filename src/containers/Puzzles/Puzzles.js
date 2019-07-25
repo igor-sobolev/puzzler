@@ -6,11 +6,12 @@ import Grid from '@material-ui/core/Grid'
 import { PageLayout } from '@/components/UI/PageLayout'
 import { PuzzleCard } from '@/components/UI/PuzzleCard'
 
-import { loadAllPuzzles } from '@/store/actions'
+import { loadAllPuzzles, voteForPuzzle } from '@/store/actions'
 
 class Puzzles extends Component {
   static propTypes = {
     loadAllPuzzles: PropTypes.func,
+    voteForPuzzle: PropTypes.func,
     puzzles: PropTypes.array
   }
 
@@ -27,7 +28,10 @@ class Puzzles extends Component {
         md={4}
         key={puzzle._id}
       >
-        <PuzzleCard puzzle={puzzle} />
+        <PuzzleCard
+          puzzle={puzzle}
+          handleVote={this.props.voteForPuzzle}
+        />
       </Grid>
     ))
     return (
@@ -48,7 +52,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  loadAllPuzzles: () => dispatch(loadAllPuzzles())
+  loadAllPuzzles: () => dispatch(loadAllPuzzles()),
+  voteForPuzzle: ({ puzzleId, rating }) => dispatch(voteForPuzzle({ puzzleId, rating }))
 })
 
 export default connect(

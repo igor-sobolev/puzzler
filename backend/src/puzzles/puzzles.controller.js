@@ -13,8 +13,9 @@ router.post('/:puzzleId/vote', vote)
 // router.delete('/:id', _delete)
 
 function getAll (req, res, next) {
+  let userId = req.user.sub
   puzzlesService
-    .getAll()
+    .getAll(userId)
     .then((users) => res.json(users))
     .catch((err) => next(err))
 }
@@ -34,8 +35,10 @@ function vote (req, res, next) {
 // }
 
 function getById (req, res, next) {
+  let userId = req.user.sub
+  let puzzleId = req.params.puzzleId
   puzzlesService
-    .getById(req.params.puzzleId)
+    .getById(userId, puzzleId)
     .then((puzzle) => (puzzle ? res.json(puzzle) : res.sendStatus(404)))
     .catch((err) => next(err))
 }

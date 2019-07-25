@@ -14,5 +14,6 @@ mongoose.Promise = global.Promise
 export default {
   User,
   Puzzle,
-  PuzzleVote
+  PuzzleVote,
+  ObjectId: mongoose.Types.ObjectId
 }

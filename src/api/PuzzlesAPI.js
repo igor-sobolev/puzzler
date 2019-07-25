@@ -4,6 +4,14 @@ class PuzzlesAPI {
   static loadAllPuzzles () {
     return axios.get('/puzzles')
   }
+
+  static loadPuzzleById (puzzleId) {
+    return axios.get(`/puzzles/${puzzleId}`)
+  }
+
+  static voteForPuzzle (puzzleId, rating) {
+    return axios.post(`/puzzles/${puzzleId}/vote`, { rating })
+  }
 }
 
 export default PuzzlesAPI

@@ -6,6 +6,7 @@ import db from '../_helpers/db'
 
 const Puzzle = db.Puzzle
 const PuzzleVote = db.PuzzleVote
+const ObjectId = db.ObjectId
 
 export default {
   getAll,
@@ -21,7 +22,7 @@ async function vote (puzzleId, userId, rating) {
     author: userId,
     puzzle: puzzleId
   })
-  console.log('user vote: ', userVote);
+  console.log('user vote: ', userVote)
   if (userVote) {
     userVote.rating = rating
   } else {
@@ -34,16 +35,17 @@ async function vote (puzzleId, userId, rating) {
   return await userVote.save()
 }
 
-async function getAll () {
-  return await aggregateAllAndPopulate()
+async function getAll (userId) {
+  return await aggregateAllAndPopulate(userId)
 }
 
-async function getById (id) {
-  return await aggregateAllAndPopulate().findById(id)
+async function getById (userId, puzzleId) {
+  const [puzzle] = await aggregateAllAndPopulate(userId, puzzleId)
+  return puzzle
 }
 
-async function aggregateAllAndPopulate () {
-  let aggregated = await Puzzle.aggregate([
+async function aggregateAllAndPopulate (userId, puzzleId) {
+  const pipeline = [
     {
       $lookup: {
         from: PuzzleVote.collection.name,
@@ -53,10 +55,32 @@ async function aggregateAllAndPopulate () {
       }
     },
     {
-      $addFields: {
+      $unwind: {
+        path: '$votes',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        author: { $first: '$author' },
+        name: { $first: '$name' },
+        size: { $first: '$size' },
+        createdDate: { $first: '$createdDate' },
+        votes: { $push: '$votes' },
+        isVoted: { $max: { $eq: ['$votes.author', ObjectId(userId)] } },
         rating: {
           $avg: '$votes.rating'
+        },
+        votedValue: {
+          $max: { $cond: [{ $eq: ['$votes.author', ObjectId(userId)] }, '$votes.rating', null] }
         }
+      }
+    },
+    {
+      $sort: {
+        rating: -1,
+        createdDate: -1
       }
     },
     {
@@ -64,7 +88,14 @@ async function aggregateAllAndPopulate () {
         votes: false
       }
     }
-  ])
+  ]
+  if (puzzleId)
+    pipeline.unshift({
+      $match: {
+        _id: ObjectId(puzzleId)
+      }
+    })
+  const aggregated = await Puzzle.aggregate(pipeline)
 
   return Puzzle.populate(aggregated, { path: 'author' })
 }
