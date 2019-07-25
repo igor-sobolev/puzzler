@@ -55,6 +55,7 @@ export const PuzzleCard = (props) => {
             rating={props.puzzle.rating}
             initial={props.puzzle.votedValue}
             handleChange={handleRatingChange}
+            highlight={true}
           />
         </Box>
         <CardMedia

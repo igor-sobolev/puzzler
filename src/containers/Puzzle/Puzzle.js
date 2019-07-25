@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 
 import { loadPuzzleById } from '@/store/actions'
 import { PageLayout } from '@/components/UI/PageLayout'
-import { PuzzleCard } from '@/components/UI/PuzzleCard'
+import { PuzzleCardFull } from '@/components/UI/PuzzleCardFull'
+import { Container } from '@material-ui/core'
 
 class Puzzle extends Component {
   static propTypes = {
@@ -18,8 +19,14 @@ class Puzzle extends Component {
   }
 
   render () {
-    const puzzle = this.props.puzzle ? <PuzzleCard puzzle={this.props.puzzle}></PuzzleCard> : null
-    return <PageLayout>{puzzle}</PageLayout>
+    const puzzle = this.props.puzzle ? (
+      <PuzzleCardFull puzzle={this.props.puzzle}></PuzzleCardFull>
+    ) : null
+    return (
+      <PageLayout>
+        <Container maxWidth="sm">{puzzle}</Container>
+      </PageLayout>
+    )
   }
 }
 
