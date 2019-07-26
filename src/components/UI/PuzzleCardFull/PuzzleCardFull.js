@@ -1,6 +1,7 @@
 import React from 'react'
+import moment from 'moment'
 import PropTypes from 'prop-types'
-import { makeStyles, Divider, Grid } from '@material-ui/core'
+import { makeStyles, Grid } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { Card, Typography, CardActions, Button, CardContent, Box } from '@material-ui/core'
 
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  value: {
+    color: theme.palette.secondary.dark
   }
 }))
 
@@ -78,10 +82,7 @@ export const PuzzleCardFull = (props) => {
                 handleChange={handleRatingChange}
               />
             </Box>
-            <Typography
-              component="span"
-              variant="subtitle1"
-            >
+            <Typography variant="subtitle1">
               Author:&nbsp;
               <Link
                 to={`/users/${props.puzzle.author._id}`}
@@ -90,11 +91,44 @@ export const PuzzleCardFull = (props) => {
                 {props.puzzle.author.firstName} {props.puzzle.author.lastName}
               </Link>
             </Typography>
-            <Typography>{props.puzzle.createdDate}</Typography>
+            <Typography variant="subtitle1">
+              Created:&nbsp;
+              <Box
+                component="span"
+                className={classes.value}
+              >
+                {moment(props.puzzle.createdDate).format('LLL')}
+              </Box>
+            </Typography>
+            <Typography variant="subtitle1">
+              Average moves:&nbsp;
+              <Box
+                component="span"
+                className={classes.value}
+              >
+                TODO
+              </Box>
+            </Typography>
+            <Typography variant="subtitle1">
+              Average time:&nbsp;
+              <Box
+                component="span"
+                className={classes.value}
+              >
+                TODO
+              </Box>
+            </Typography>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions className={classes.buttons}>
+        <Button
+          size="small"
+          color="secondary"
+          variant="contained"
+        >
+          Leaderboard
+        </Button>
         <Button
           size="small"
           color="primary"

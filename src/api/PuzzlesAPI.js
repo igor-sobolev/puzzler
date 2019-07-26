@@ -9,6 +9,10 @@ class PuzzlesAPI {
     return axios.get(`/puzzles/${puzzleId}`)
   }
 
+  static loadAllUserPuzzles () {
+    return axios.get('/puzzles/current')
+  }
+
   static voteForPuzzle (puzzleId, rating) {
     return axios.post(`/puzzles/${puzzleId}/vote`, { rating })
   }

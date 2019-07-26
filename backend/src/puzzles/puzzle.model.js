@@ -6,6 +6,7 @@ const puzzleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, unique: true, required: true },
   size: { type: String, required: true },
+  isDeleted: { type: String, default: false },
   createdDate: { type: Date, default: Date.now }
 })
 

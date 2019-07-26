@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 1)
   },
   ratingLow: {
-    color: colors.red[500]
+    color: colors.red[600]
   },
   ratingMedium: {
-    color: colors.orange[500]
+    color: colors.orange[600]
   },
   ratingHigh: {
-    color: colors.green[500]
+    color: colors.green[600]
   }
 }))
 

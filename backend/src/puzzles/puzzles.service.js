@@ -11,7 +11,8 @@ const ObjectId = db.ObjectId
 export default {
   getAll,
   getById,
-  vote
+  vote,
+  getAllByUserId
   // create,
   // update,
   // delete: _delete
@@ -44,8 +45,17 @@ async function getById (userId, puzzleId) {
   return puzzle
 }
 
-async function aggregateAllAndPopulate (userId, puzzleId) {
+async function getAllByUserId (userId) {
+  return await await aggregateAllAndPopulate(userId, null, true)
+}
+
+async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
   const pipeline = [
+    {
+      $match: {
+        isDeleted: false
+      }
+    },
     {
       $lookup: {
         from: PuzzleVote.collection.name,
@@ -89,20 +99,25 @@ async function aggregateAllAndPopulate (userId, puzzleId) {
       }
     }
   ]
-  if (puzzleId)
+  if (puzzleId) {
     pipeline.unshift({
       $match: {
         _id: ObjectId(puzzleId)
       }
     })
+  }
+  if (filterOwn) {
+    pipeline.unshift({
+      $match: {
+        author: ObjectId(userId)
+      }
+    })
+  }
+
   const aggregated = await Puzzle.aggregate(pipeline)
 
   return Puzzle.populate(aggregated, { path: 'author' })
 }
-
-// async function getById (id) {
-//   return await User.findById(id).select('-hash')
-// }
 
 // async function create (userParam) {
 //   // validate

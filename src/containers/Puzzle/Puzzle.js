@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Container from '@material-ui/core/Container'
+import Box from '@material-ui/core/Box'
 
 import { loadPuzzleById } from '@/store/actions'
 import { PageLayout } from '@/components/UI/PageLayout'
 import { PuzzleCardFull } from '@/components/UI/PuzzleCardFull'
-import { Container } from '@material-ui/core'
 
 class Puzzle extends Component {
   static propTypes = {
@@ -24,7 +25,9 @@ class Puzzle extends Component {
     ) : null
     return (
       <PageLayout>
-        <Container maxWidth="sm">{puzzle}</Container>
+        <Container maxWidth="sm">
+          <Box>{puzzle}</Box>
+        </Container>
       </PageLayout>
     )
   }

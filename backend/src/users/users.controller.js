@@ -11,8 +11,8 @@ router.post('/register', register)
 router.get('/', getAll)
 router.get('/current', getCurrent)
 router.get('/:userId', getById)
-router.put('/:userId', currentUserOnly, update)
-router.put('/:userId/avatar', currentUserOnly, upload.array('files'), updateAvatar)
+router.put('/:userId', currentUserOnly('userId'), update)
+router.put('/:userId/avatar', currentUserOnly('userId'), upload.array('files'), updateAvatar)
 router.delete('/:userId', _delete)
 
 function authenticate (req, res, next) {

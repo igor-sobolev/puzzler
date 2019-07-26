@@ -11,6 +11,12 @@ const savePuzzles = (data) => {
   }
 }
 
+const clearPuzzles = () => {
+  return {
+    type: actionTypes.CLEAR_PUZZLES
+  }
+}
+
 const savePuzzle = (data) => {
   return {
     type: actionTypes.SAVE_PUZZLE,
@@ -18,10 +24,30 @@ const savePuzzle = (data) => {
   }
 }
 
+const clearPuzzle = () => {
+  return {
+    type: actionTypes.CLEAR_PUZZLE
+  }
+}
+
 export const loadAllPuzzles = () => {
   return async (dispatch) => {
     try {
+      dispatch(clearPuzzles())
       let response = await PuzzlesAPI.loadAllPuzzles()
+      let puzzles = response.data
+      dispatch(savePuzzles({ puzzles }))
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+export const loadAllUserPuzzles = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(clearPuzzles())
+      let response = await PuzzlesAPI.loadAllUserPuzzles()
       let puzzles = response.data
       dispatch(savePuzzles({ puzzles }))
     } catch (e) {
@@ -33,6 +59,7 @@ export const loadAllPuzzles = () => {
 export const loadPuzzleById = (id) => {
   return async (dispatch) => {
     try {
+      dispatch(clearPuzzle())
       let response = await PuzzlesAPI.loadPuzzleById(id)
       let puzzle = response.data
       dispatch(savePuzzle({ puzzle }))
@@ -50,4 +77,12 @@ export const voteForPuzzle = ({ puzzleId, rating }) => {
       console.log(e)
     }
   }
+}
+
+export const editPuzzle = (puzzle) => {
+  console.log('edit')
+}
+
+export const deletePuzzle = (puzzle) => {
+  console.log('delete')
 }
