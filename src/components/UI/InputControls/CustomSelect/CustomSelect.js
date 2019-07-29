@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core'
 
 const fontWidth = 8
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   selectContainer: {
     width: '100%',
     position: 'relative'
@@ -24,7 +24,7 @@ export const CustomSelect = ({ input, label, meta: { touched, error }, options, 
     <FormControl
       variant="outlined"
       error={touched && error}
-      class={classes.selectContainer}
+      className={classes.selectContainer}
     >
       <InputLabel htmlFor={selectId}>{label}</InputLabel>
       <NativeSelect

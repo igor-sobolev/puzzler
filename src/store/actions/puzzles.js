@@ -8,10 +8,11 @@ import { readAsBase64 } from '@/util/files'
 import { UPLOAD_FORM_NAME } from '@/enum/forms.enum'
 import toastService from '@/services/toastService'
 
-const savePuzzleImageToModel = (base64) => {
+const savePuzzleImageToModel = ({ base64, file }) => {
   return {
     type: actionTypes.SAVE_PUZZLE_IMAGE_TO_MODEL,
-    image: base64
+    image: base64,
+    file
   }
 }
 
@@ -122,7 +123,7 @@ const fetchPuzzleImage = async (dispatch, getState) => {
   try {
     const [file] = getState().form[UPLOAD_FORM_NAME].values.files
     let base64 = await readAsBase64(file)
-    dispatch(savePuzzleImageToModel(base64))
+    dispatch(savePuzzleImageToModel({ base64, file }))
     dispatch(nextStep())
   } catch (e) {
     console.log(e)

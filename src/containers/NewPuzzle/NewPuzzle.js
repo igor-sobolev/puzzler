@@ -12,6 +12,7 @@ import { StepsHeading } from '@/components/UI/StepsHeading'
 import { UploadForm } from '@/containers/Forms/UploadForm'
 import { PuzzleForm } from '@/containers/Forms/PuzzleForm'
 
+import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
 import { prevPuzzleStep, nextPuzzleStep } from '@/store/actions'
 import { SELECT_PICTURE, PUZZLE_OPTIONS, PIECES_PLACEMENT } from '@/enum/puzzleSteps.enum'
 import { createStyles, withStyles } from '@material-ui/core'
@@ -28,17 +29,39 @@ class NewPuzzle extends Component {
     prevStep: PropTypes.func,
     nextStep: PropTypes.func,
     classes: PropTypes.object,
-    steps: PropTypes.array
+    steps: PropTypes.array,
+    form: PropTypes.any,
+    newPuzzle: PropTypes.object
   }
 
   getStepContent = () => {
     switch (this.props.steps[this.props.active]) {
       case SELECT_PICTURE:
-        return <UploadForm disableButtons={true} />
+        return <UploadForm
+          disableButtons={true}
+          initFiles={this.props.newPuzzle.file ? [this.props.newPuzzle.file] : null}
+        />
       case PUZZLE_OPTIONS:
-        return <PuzzleForm />
+        return <PuzzleForm initData={this.props.newPuzzle} />
       default:
         return null
+    }
+  }
+
+  canGoNext = () => {
+    switch (this.props.steps[this.props.active]) {
+      case SELECT_PICTURE:
+        return !(
+          this.props.form &&
+          this.props.form[UPLOAD_FORM_NAME] &&
+          this.props.form[UPLOAD_FORM_NAME].syncErrors
+        )
+      case PUZZLE_OPTIONS:
+        return !(
+          this.props.form &&
+          this.props.form[PUZZLE_FORM_NAME] &&
+          this.props.form[PUZZLE_FORM_NAME].syncErrors
+        )
     }
   }
 
@@ -71,6 +94,7 @@ class NewPuzzle extends Component {
                   color="primary"
                   onClick={() => this.props.nextStep(this.props.steps[this.props.active])}
                   className={this.props.classes.btn}
+                  disabled={!this.canGoNext()}
                 >
                   Next
                 </Button>
@@ -85,7 +109,9 @@ class NewPuzzle extends Component {
 
 const mapStateToProps = (state) => ({
   active: state.puzzles.puzzleStepActive,
-  steps: state.puzzles.puzzleSteps
+  steps: state.puzzles.puzzleSteps,
+  form: state.form,
+  newPuzzle: state.puzzles.newPuzzle
 })
 
 const mapDispatchToProps = (dispatch) => ({

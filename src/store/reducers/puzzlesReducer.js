@@ -66,7 +66,8 @@ const saveImage = (state, action) => {
     ...state,
     newPuzzle: {
       ...state.newPuzzle,
-      image: action.image
+      image: action.image,
+      file: action.file
     }
   }
 }

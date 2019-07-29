@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { reduxForm, Field, initialize } from 'redux-form'
+
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 
 import { CustomDropzone } from '@/components/UI/InputControls/CustomDropzone'
 import { validator as validate } from './validator'
+
+import { UPLOAD_FORM_NAME } from '@/enum/forms.enum'
 
 const FILE_FIELD_NAME = 'files'
 
@@ -17,12 +21,18 @@ class UploadForm extends Component {
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
     submitting: PropTypes.bool,
-    disableButtons: PropTypes.bool
+    disableButtons: PropTypes.bool,
+    initFiles: PropTypes.array,
+    initialize: PropTypes.func
   }
 
   onSubmitHandler = (e) => {
     e.preventDefault()
     this.props.handleSubmit()
+  }
+
+  componentDidMount () {
+    this.props.initialize(this.props.initFiles)
   }
 
   buttons = () => {
@@ -78,7 +88,16 @@ class UploadForm extends Component {
   }
 }
 
-export default reduxForm({
-  form: 'UploadForm',
-  validate
-})(UploadForm)
+const mapDispatchToProps = (dispatch) => ({
+  initialize: (data) => dispatch(initialize(UPLOAD_FORM_NAME, { files: data }))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(
+  reduxForm({
+    form: UPLOAD_FORM_NAME,
+    validate
+  })(UploadForm)
+)

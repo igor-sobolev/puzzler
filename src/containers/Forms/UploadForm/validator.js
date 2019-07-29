@@ -1,11 +1,8 @@
 
 export function validator (values) {
   const errors = {}
-  const requiredFields = ['files']
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = 'This field is required'
-    }
-  })
+  if (!(values.files && Array.isArray(values.files) && values.files.length)) {
+    errors.files = 'This field is required'
+  }
   return errors
 }
