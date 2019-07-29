@@ -12,6 +12,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
+    "q": "^1.5.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",

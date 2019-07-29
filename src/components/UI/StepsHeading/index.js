@@ -1,0 +1,1 @@
+export { StepsHeading } from './StepsHeading'
