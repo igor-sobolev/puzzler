@@ -37,7 +37,7 @@ class Puzzles extends Component {
       </Grid>
     ))
     return (
-      <PageLayout title="Explore puzzles">
+      <PageLayout title="My puzzles">
         <Grid
           container
           spacing={2}

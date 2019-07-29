@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom'
 
 import { Header } from '@/components/Navigation/Header'
 import { Drawer } from '@/components/Navigation/Drawer'
+import { Spinner } from '@/components/UI/Spinner'
 import { RouterView } from '@/containers/RouterView'
 
 import './App.styl'
@@ -31,7 +32,8 @@ const theme = createMuiTheme({
 class App extends Component {
   static propTypes = {
     currentUser: PropTypes.object,
-    location: PropTypes.object
+    location: PropTypes.object,
+    loading: PropTypes.bool
   }
 
   state = {
@@ -67,6 +69,7 @@ class App extends Component {
             className="main"
           >
             <RouterView></RouterView>
+            { this.props.loading ? <Spinner /> : null }
           </Container>
         </div>
       </MuiThemeProvider>
@@ -75,7 +78,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  currentUser: state.auth.user
+  currentUser: state.auth.user,
+  loading: state.shared.loading
 })
 
 export default connect(mapStateToProps)(withRouter(App))
