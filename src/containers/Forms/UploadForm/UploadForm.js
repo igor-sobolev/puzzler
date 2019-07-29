@@ -16,7 +16,8 @@ class UploadForm extends Component {
     reset: PropTypes.func,
     invalid: PropTypes.bool,
     pristine: PropTypes.bool,
-    submitting: PropTypes.bool
+    submitting: PropTypes.bool,
+    disableButtons: PropTypes.bool
   }
 
   onSubmitHandler = (e) => {
@@ -24,8 +25,37 @@ class UploadForm extends Component {
     this.props.handleSubmit()
   }
 
+  buttons = () => {
+    return this.props.disableButtons ? null : (
+      <Grid
+        container
+        spacing={1}
+        justify="flex-end"
+      >
+        <Grid item>
+          <Button
+            type="button"
+            variant="contained"
+            onClick={this.props.handleCancel}
+          >
+            cancel
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={this.props.pristine || this.props.invalid || this.props.submitting}
+          >
+            Upload
+          </Button>
+        </Grid>
+      </Grid>
+    )
+  }
+
   render () {
-    const { handleCancel } = this.props
     return (
       <form onSubmit={this.onSubmitHandler}>
         <div>
@@ -42,31 +72,7 @@ class UploadForm extends Component {
             resetHandler={this.props.reset}
           />
         </div>
-        <Grid
-          container
-          spacing={1}
-          justify="flex-end"
-        >
-          <Grid item>
-            <Button
-              type="button"
-              variant="contained"
-              onClick={handleCancel}
-            >
-              cancel
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={this.props.pristine || this.props.invalid || this.props.submitting}
-            >
-              Upload
-            </Button>
-          </Grid>
-        </Grid>
+        {this.buttons()}
       </form>
     )
   }

@@ -8,6 +8,8 @@ import { CustomTextField } from '@/components/UI/InputControls/CustomTextField'
 import { validator as validate } from './validator'
 import { Grid } from '@material-ui/core'
 
+import { REGISTER_FORM_NAME } from '@/enum/forms.enum'
+
 const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -127,6 +129,6 @@ RegisterForm.propTypes = {
 }
 
 export default reduxForm({
-  form: 'RegisterForm',
+  form: REGISTER_FORM_NAME,
   validate
 })(RegisterForm)

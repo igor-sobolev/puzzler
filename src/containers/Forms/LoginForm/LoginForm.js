@@ -8,6 +8,8 @@ import { CustomCheckbox } from '@/components/UI/InputControls/CustomCheckbox'
 import { CustomTextField } from '@/components/UI/InputControls/CustomTextField'
 import { validator as validate } from './validator'
 
+import { LOGIN_FORM_NAME } from '@/enum/forms.enum'
+
 const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -79,6 +81,6 @@ LoginForm.propTypes = {
 }
 
 export default reduxForm({
-  form: 'LoginForm',
+  form: LOGIN_FORM_NAME,
   validate
 })(LoginForm)
