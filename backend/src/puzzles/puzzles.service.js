@@ -3,6 +3,7 @@
 
 // import config from '../config.json' TODO: remove
 import db from '../_helpers/db'
+import filesService from '../files/files.service'
 
 const Puzzle = db.Puzzle
 const PuzzleVote = db.PuzzleVote
@@ -12,8 +13,8 @@ export default {
   getAll,
   getById,
   vote,
-  getAllByUserId
-  // create,
+  getAllByUserId,
+  create
   // update,
   // delete: _delete
 }
@@ -34,6 +35,20 @@ async function vote (puzzleId, userId, rating) {
     })
   }
   return await userVote.save()
+}
+
+async function create (payload, userId, image) {
+  if (await Puzzle.findOne({ name: payload.name })) {
+    // console.log(withName);
+    filesService.remove(image)
+    throw 'This puzzle name has been taken'
+  }
+  let puzzle = new Puzzle({
+    ...payload,
+    author: userId,
+    image
+  })
+  return await puzzle.save()
 }
 
 async function getAll (userId) {
@@ -118,23 +133,6 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
 
   return Puzzle.populate(aggregated, { path: 'author' })
 }
-
-// async function create (userParam) {
-//   // validate
-//   if (await User.findOne({ email: userParam.email })) {
-//     throw 'Username "' + userParam.email + '" is already taken'
-//   }
-
-//   const user = new User(userParam)
-
-//   // hash password
-//   if (userParam.password) {
-//     user.hash = bcrypt.hashSync(userParam.password, 10)
-//   }
-
-//   // save user
-//   return await user.save()
-// }
 
 // async function update (id, userParam) {
 //   const user = await User.findById(id)

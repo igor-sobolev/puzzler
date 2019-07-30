@@ -19,17 +19,20 @@ const clearStep = (state) => {
 }
 
 const nextStep = (state) => {
-  console.log(state.puzzleStepActive < state.puzzleSteps.length);
   return {
     ...state,
-    puzzleStepActive: state.puzzleStepActive < state.puzzleSteps.length ? state.puzzleStepActive + 1 : state.puzzleStepActive
+    puzzleStepActive:
+      state.puzzleStepActive < state.puzzleSteps.length
+        ? state.puzzleStepActive + 1
+        : state.puzzleStepActive
   }
 }
 
 const prevStep = (state) => {
   return {
     ...state,
-    puzzleStepActive: state.puzzleStepActive > 0 ? state.puzzleStepActive - 1 : state.puzzleStepActive
+    puzzleStepActive:
+      state.puzzleStepActive > 0 ? state.puzzleStepActive - 1 : state.puzzleStepActive
   }
 }
 
@@ -72,6 +75,16 @@ const saveImage = (state, action) => {
   }
 }
 
+const saveOptions = (state, action) => {
+  return {
+    ...state,
+    newPuzzle: {
+      ...state.newPuzzle,
+      ...action.options
+    }
+  }
+}
+
 const reducer = (state = initializeState(), action) => {
   switch (action.type) {
     case actionTypes.SAVE_PUZZLES:
@@ -90,6 +103,8 @@ const reducer = (state = initializeState(), action) => {
       return clearStep(state)
     case actionTypes.SAVE_PUZZLE_IMAGE_TO_MODEL:
       return saveImage(state, action)
+    case actionTypes.SAVE_PUZZLE_OPTIONS_TO_MODEL:
+      return saveOptions(state, action)
     default:
       return state
   }

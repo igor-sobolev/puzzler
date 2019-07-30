@@ -16,6 +16,10 @@ class PuzzlesAPI {
   static voteForPuzzle (puzzleId, rating) {
     return axios.post(`/puzzles/${puzzleId}/vote`, { rating })
   }
+
+  static createPuzzle (data) {
+    return axios.post('/puzzles/', data)
+  }
 }
 
 export default PuzzlesAPI

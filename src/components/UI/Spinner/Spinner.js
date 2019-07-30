@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   },
   backDrop: {
     position: 'fixed',
-    background: 'rgba(0, 0, 0, 0.05)',
+    background: 'rgba(0, 0, 0, 0.25)',
     height: '100vh',
     width: '100vw',
     top: 0,

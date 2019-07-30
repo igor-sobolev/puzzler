@@ -23,6 +23,12 @@ async function getFile (filename) {
   return { stream: fs.createReadStream(file), type }
 }
 
+async function remove (filename) {
+  var file = path.join(uploadsDir, filename)
+  fs.unlinkSync(file)
+}
+
 export default {
-  getFile
+  getFile,
+  remove
 }

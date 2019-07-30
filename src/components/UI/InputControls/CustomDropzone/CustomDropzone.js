@@ -1,8 +1,10 @@
-import React, { createRef } from 'react'
-import Dropzone from 'react-dropzone'
+import React, { useLayoutEffect, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import PropTypes from 'prop-types'
 import { makeStyles, colors, Fab } from '@material-ui/core'
 import RemoveIcon from '@material-ui/icons/Clear'
+
+import { addThumbnails } from '@/util/files'
 
 const maxSizeInBytes = 15728640 // 15mb
 
@@ -42,66 +44,75 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const dropRef = createRef()
-
 export const CustomDropzone = (props) => {
   const classes = useStyles()
-  const thumbnail = (file) => URL.createObjectURL(file)
+  const [files, setFiles] = useState([]) // TODO: take a look at this component it's no more stateless
+  const [isDragActive, setDrag] = useState(false)
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: ['image/png', 'image/jpeg'],
+    onDrop: (acceptedFiles) => {
+      setFiles(addThumbnails(acceptedFiles))
+    },
+    onDragEnter: () => setDrag(true),
+    onDragLeave: () => setDrag(false),
+    maxSize: maxSizeInBytes
+  })
+
+  const thumbs = files.map((file, index) => (
+    <img
+      key={index}
+      src={file.preview}
+      className={classes.previewImage}
+      alt="preview"
+    />
+  ))
+
+  useEffect(() => {
+    props.input.onChange(files) // emmit files to parent
+    return () => {
+      // Make sure to revoke the data uris to avoid memory leaks
+      files.forEach((file) => URL.revokeObjectURL(file.preview))
+    }
+    // eslint-disable-next-line
+  }, [files])
 
   const reset = () => {
-    props.input.value.splice(0, props.input.value.length)
+    files.splice(0, files.length)
     props.resetHandler()
   }
 
+  useLayoutEffect(() => {
+    // did mount
+    if (props.initFiles && Array.isArray(props.initFiles)) {
+      files.push(...addThumbnails(props.initFiles))
+    }
+    // eslint-disable-next-line
+  }, [])
+
   return (
-    <React.Fragment>
-      <Dropzone
-        ref={dropRef}
-        accept={['image/*']}
-        maxSize={maxSizeInBytes}
-        name={props.name}
-        multiple={props.multiple}
-        onDrop={(filesToUpload) => props.input.onChange(filesToUpload)}
-      >
-        {({ getRootProps, getInputProps, acceptedFiles, isFocused, isDragActive }) => {
-          return (
-            <div>
-              {!acceptedFiles.length ? (
-                <div
-                  {...getRootProps({
-                    className:
-                      classes.dropArea +
-                      ' ' +
-                      (isFocused || isDragActive ? classes.dropAreaActive : '')
-                  })}
-                >
-                  <input {...getInputProps()} />
-                  <p>Drop files here or click to select</p>
-                </div>
-              ) : (
-                <aside className={classes.preview}>
-                  {acceptedFiles.map((file, index) => (
-                    <img
-                      key={index}
-                      src={thumbnail(file)}
-                      className={classes.previewImage}
-                      alt="preview"
-                    />
-                  ))}
-                  <Fab
-                    onClick={reset}
-                    size="small"
-                    className={classes.removeBtn}
-                  >
-                    <RemoveIcon />
-                  </Fab>
-                </aside>
-              )}
-            </div>
-          )
-        }}
-      </Dropzone>
-    </React.Fragment>
+    <section className="container">
+      {!files.length ? (
+        <div
+          {...getRootProps({
+            className: classes.dropArea + ' ' + (isDragActive ? classes.dropAreaActive : '')
+          })}
+        >
+          <input {...getInputProps()} />
+          <p>Drop files here or click to select</p>
+        </div>
+      ) : (
+        <aside className={classes.preview}>
+          {thumbs}
+          <Fab
+            onClick={reset}
+            size="small"
+            className={classes.removeBtn}
+          >
+            <RemoveIcon />
+          </Fab>
+        </aside>
+      )}
+    </section>
   )
 }
 
@@ -109,5 +120,6 @@ CustomDropzone.propTypes = {
   name: PropTypes.string,
   input: PropTypes.object,
   multiple: PropTypes.bool,
-  resetHandler: PropTypes.func
+  resetHandler: PropTypes.func,
+  initFiles: PropTypes.array
 }

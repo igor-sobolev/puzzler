@@ -1,6 +1,6 @@
 ﻿import express from 'express'
 import puzzlesService from './puzzles.service'
-// import { upload } from '../storage' TODO: remove
+import { upload } from '../storage'
 
 const router = express.Router()
 
@@ -9,6 +9,7 @@ router.get('/', getAll)
 router.get('/current', getCurrentUserPuzzles)
 router.get('/:puzzleId', getById)
 router.post('/:puzzleId/vote', vote)
+router.post('/', upload.single('file'), create)
 // router.put('/:id', update)
 // router.delete('/:id', _delete)
 
@@ -24,6 +25,13 @@ function vote (req, res, next) {
   puzzlesService
     .vote(req.params.puzzleId, req.user.sub, req.body.rating)
     .then(() => res.json({}))
+    .catch((err) => next(err))
+}
+
+function create (req, res, next) {
+  puzzlesService
+    .create(JSON.parse(req.body.data), req.user.sub, req.file.filename)
+    .then((created) => res.json(created))
     .catch((err) => next(err))
 }
 

@@ -17,7 +17,8 @@ module.exports = {
     'space-before-function-paren': ['error', 'always'],
     'react/jsx-first-prop-new-line': [1, 'multiline'],
     'react/jsx-max-props-per-line': ['error', { maximum: 1 }],
-    'react/jsx-closing-bracket-location': [1, 'line-aligned']
+    'react/jsx-closing-bracket-location': [1, 'line-aligned'],
+    'react-hooks/exhaustive-deps': [0, 'never']
   },
   parser: 'babel-eslint'
 }

@@ -9,3 +9,11 @@ export const readAsBase64 = (file) => {
   reader.readAsDataURL(file)
   return deferred.promise
 }
+
+export const addThumbnails = (array) => {
+  return array.map((file) =>
+    Object.assign(file, {
+      preview: URL.createObjectURL(file)
+    })
+  )
+}

@@ -31,9 +31,9 @@ class UploadForm extends Component {
     this.props.handleSubmit()
   }
 
-  componentDidMount () {
-    this.props.initialize(this.props.initFiles)
-  }
+  // componentDidMount () {
+  //   this.props.initialize(this.props.initFiles)
+  // }
 
   buttons = () => {
     return this.props.disableButtons ? null : (
@@ -79,6 +79,7 @@ class UploadForm extends Component {
             name={FILE_FIELD_NAME}
             component={CustomDropzone}
             multiple={false}
+            initFiles={this.props.initFiles}
             resetHandler={this.props.reset}
           />
         </div>

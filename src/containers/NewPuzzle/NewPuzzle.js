@@ -37,12 +37,16 @@ class NewPuzzle extends Component {
   getStepContent = () => {
     switch (this.props.steps[this.props.active]) {
       case SELECT_PICTURE:
-        return <UploadForm
-          disableButtons={true}
-          initFiles={this.props.newPuzzle.file ? [this.props.newPuzzle.file] : null}
-        />
+        return (
+          <UploadForm
+            disableButtons={true}
+            initFiles={this.props.newPuzzle.file ? [this.props.newPuzzle.file] : null}
+          />
+        )
       case PUZZLE_OPTIONS:
         return <PuzzleForm initData={this.props.newPuzzle} />
+      case PIECES_PLACEMENT:
+        return <div>placeholder</div>
       default:
         return null
     }
@@ -62,8 +66,22 @@ class NewPuzzle extends Component {
           this.props.form[PUZZLE_FORM_NAME] &&
           this.props.form[PUZZLE_FORM_NAME].syncErrors
         )
+      case PIECES_PLACEMENT:
+        return true
+      default:
+        return false
     }
   }
+
+  canGoBack = () => {
+    return this.props.active > 0
+  }
+
+  isLastStep = () => {
+    return this.props.active === this.props.steps.length - 1
+  }
+
+  activeStep = () => this.props.steps[this.props.active]
 
   render () {
     return (
@@ -84,19 +102,20 @@ class NewPuzzle extends Component {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={this.props.prevStep}
+                  onClick={() => this.props.prevStep(this.activeStep())}
                   className={this.props.classes.btn}
+                  disabled={!this.canGoBack()}
                 >
                   Back
                 </Button>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => this.props.nextStep(this.props.steps[this.props.active])}
+                  onClick={() => this.props.nextStep(this.activeStep())}
                   className={this.props.classes.btn}
                   disabled={!this.canGoNext()}
                 >
-                  Next
+                  { !this.isLastStep() ? 'Next' : 'Finish' }
                 </Button>
               </Grid>
             </CardContent>

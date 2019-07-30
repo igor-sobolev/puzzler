@@ -2,11 +2,13 @@
 
 import * as actionTypes from './actionTypes'
 import * as puzzleSteps from '@/enum/puzzleSteps.enum'
+import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
+
 import PuzzlesAPI from '@/api/PuzzlesAPI'
 
-import { readAsBase64 } from '@/util/files'
-import { UPLOAD_FORM_NAME } from '@/enum/forms.enum'
 import toastService from '@/services/toastService'
+
+import { startLoading, stopLoading } from '@/store/actions'
 
 const savePuzzleImageToModel = ({ base64, file }) => {
   return {
@@ -16,10 +18,24 @@ const savePuzzleImageToModel = ({ base64, file }) => {
   }
 }
 
+const savePuzzleOptionsToModel = (data) => {
+  return {
+    type: actionTypes.SAVE_PUZZLE_OPTIONS_TO_MODEL,
+    ...data
+  }
+}
+
 const savePuzzles = (data) => {
   return {
     type: actionTypes.SAVE_PUZZLES,
     ...data
+  }
+}
+
+const saveCreated = (data) => {
+  return {
+    type: actionTypes.SAVE_CREATED_PUZZLE,
+    data
   }
 }
 
@@ -48,7 +64,7 @@ const nextStep = () => {
   }
 }
 
-export const prevPuzzleStep = () => {
+const prevStep = () => {
   return {
     type: actionTypes.PREV_PUZZLE_STEP
   }
@@ -117,17 +133,41 @@ export const deletePuzzle = (puzzle) => {
   console.log('delete')
 }
 
-
-
 const fetchPuzzleImage = async (dispatch, getState) => {
   try {
     const [file] = getState().form[UPLOAD_FORM_NAME].values.files
-    let base64 = await readAsBase64(file)
-    dispatch(savePuzzleImageToModel({ base64, file }))
+    dispatch(savePuzzleImageToModel({ file }))
     dispatch(nextStep())
   } catch (e) {
     console.log(e)
     toastService.error('Failed to load image')
+  }
+}
+
+const saveOptionsAndCreatePuzzle = async (dispatch, getState) => {
+  dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
+  dispatch(createPuzzle())
+}
+
+const saveOptionsAndGoBack = async (dispatch, getState) => {
+  dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
+  dispatch(prevStep())
+}
+
+const createPuzzle = () => {
+  return async (dispatch, getState) => {
+    try {
+      const { file, ...data } = getState().puzzles.newPuzzle
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('data', JSON.stringify(data))
+      dispatch(startLoading())
+      let response = await PuzzlesAPI.createPuzzle(formData)
+      dispatch(saveCreated(response.data))
+      dispatch(nextStep())
+    } finally {
+      dispatch(stopLoading())
+    }
   }
 }
 
@@ -136,6 +176,25 @@ export const nextPuzzleStep = (currentStep) => {
     switch (currentStep) {
       case puzzleSteps.SELECT_PICTURE:
         return await fetchPuzzleImage(dispatch, getState)
+      case puzzleSteps.PUZZLE_OPTIONS:
+        return await saveOptionsAndCreatePuzzle(dispatch, getState)
+      case puzzleSteps.PIECES_PLACEMENT:
+        return // await updatePuzzlePlacement(dispatch, getState)
+      default:
+        throw new Error('Bad step')
+    }
+  }
+}
+
+export const prevPuzzleStep = (currentStep) => {
+  return async (dispatch, getState) => {
+    switch (currentStep) {
+      case puzzleSteps.SELECT_PICTURE:
+        return
+      case puzzleSteps.PUZZLE_OPTIONS:
+        return await saveOptionsAndGoBack(dispatch, getState)
+      case puzzleSteps.PIECES_PLACEMENT:
+        return dispatch(prevStep())
       default:
         throw new Error('Bad step')
     }
