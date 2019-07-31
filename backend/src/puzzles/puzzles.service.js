@@ -37,18 +37,22 @@ async function vote (puzzleId, userId, rating) {
   return await userVote.save()
 }
 
-async function create (payload, userId, image) {
+async function create (payload, userId, imageFileName) {
   if (await Puzzle.findOne({ name: payload.name })) {
     // console.log(withName);
-    filesService.remove(image)
+    filesService.remove(imageFileName)
     throw 'This puzzle name has been taken'
   }
+  let images = await filesService.cutImageToPieces(imageFileName, payload.size)
   let puzzle = new Puzzle({
     ...payload,
     author: userId,
-    image
+    solution: images,
+    piecesToSolve: images
   })
-  return await puzzle.save()
+  let saved = await puzzle.save()
+  let { solution, ...withoutSolution } = saved.toObject()
+  return withoutSolution
 }
 
 async function getAll (userId) {
