@@ -83,7 +83,7 @@ async function updateAvatar (id, filename) {
   if (!user) throw 'User was not found'
   // copy userParam properties to user
   Object.assign(user, {
-    avatar: '/files/' + filename
+    avatar: filename
   })
 
   return await user.save()

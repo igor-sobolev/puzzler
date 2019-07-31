@@ -70,7 +70,7 @@ class UserProfile extends Component {
   }
 
   resolveAvatar = () => {
-    return this.props.user.avatar ? SERVER_URL + this.props.user.avatar : null
+    return this.props.user.avatar ? `${SERVER_URL}/files/${this.props.user.avatar}` : null
   }
 
   isCurrentUser = () => {

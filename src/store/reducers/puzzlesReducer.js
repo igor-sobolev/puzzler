@@ -85,6 +85,16 @@ const saveOptions = (state, action) => {
   }
 }
 
+const saveCreated = (state, action) => {
+  return {
+    ...state,
+    newPuzzle: {
+      ...state.newPuzzle,
+      ...action.data
+    }
+  }
+}
+
 const reducer = (state = initializeState(), action) => {
   switch (action.type) {
     case actionTypes.SAVE_PUZZLES:
@@ -105,6 +115,8 @@ const reducer = (state = initializeState(), action) => {
       return saveImage(state, action)
     case actionTypes.SAVE_PUZZLE_OPTIONS_TO_MODEL:
       return saveOptions(state, action)
+    case actionTypes.SAVE_CREATED_PUZZLE:
+        return saveCreated(state, action)
     default:
       return state
   }

@@ -6,16 +6,19 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import { createStyles, withStyles } from '@material-ui/core'
 
 import { PageLayout } from '@/components/UI/PageLayout'
 import { StepsHeading } from '@/components/UI/StepsHeading'
 import { UploadForm } from '@/containers/Forms/UploadForm'
 import { PuzzleForm } from '@/containers/Forms/PuzzleForm'
+import { PiecePlacer } from '@/components/UI/PiecePlacer'
 
 import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
 import { prevPuzzleStep, nextPuzzleStep } from '@/store/actions'
 import { SELECT_PICTURE, PUZZLE_OPTIONS, PIECES_PLACEMENT } from '@/enum/puzzleSteps.enum'
-import { createStyles, withStyles } from '@material-ui/core'
+import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
+import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
 
 const styles = createStyles((theme) => ({
   btn: {
@@ -34,6 +37,20 @@ class NewPuzzle extends Component {
     newPuzzle: PropTypes.object
   }
 
+  alignColumnNumberToPuzzleSize = () => {
+    const size = this.props.newPuzzle.size
+    switch (size) {
+      case SMALL:
+        return SMALL_PIECES
+      case MEDIUM:
+        return MEDIUM_PIECES
+      case LARGE:
+        return LARGE_PIECES
+      default:
+        return SMALL_PIECES
+    }
+  }
+
   getStepContent = () => {
     switch (this.props.steps[this.props.active]) {
       case SELECT_PICTURE:
@@ -46,7 +63,12 @@ class NewPuzzle extends Component {
       case PUZZLE_OPTIONS:
         return <PuzzleForm initData={this.props.newPuzzle} />
       case PIECES_PLACEMENT:
-        return <div>placeholder</div>
+        return (
+          <PiecePlacer
+            pieces={this.props.newPuzzle.piecesToSolve}
+            cols={this.alignColumnNumberToPuzzleSize()}
+          />
+        )
       default:
         return null
     }
@@ -115,7 +137,7 @@ class NewPuzzle extends Component {
                   className={this.props.classes.btn}
                   disabled={!this.canGoNext()}
                 >
-                  { !this.isLastStep() ? 'Next' : 'Finish' }
+                  {!this.isLastStep() ? 'Next' : 'Finish'}
                 </Button>
               </Grid>
             </CardContent>

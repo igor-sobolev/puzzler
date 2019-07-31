@@ -51,7 +51,7 @@ async function extractPieces (imageBuffer, pieceSize, nameWithExt) {
   console.log(image)
   for (let i = 0; i < IMAGE_DIMENSION_SIZE; i += pieceSize) {
     for (let j = 0; j < IMAGE_DIMENSION_SIZE; j += pieceSize) {
-      let pieceFileName = `${nameWithExt.name}-${Buffer.from(`${i}-${j}`).toString('base64')}.${
+      let pieceFileName = `${nameWithExt.name}-${Buffer.from(`${i}-${j}`).toString('base64')}${
         nameWithExt.ext
       }`
       let jointPath = path.join(uploadsDir, pieceFileName)
