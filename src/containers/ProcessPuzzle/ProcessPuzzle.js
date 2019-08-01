@@ -37,7 +37,7 @@ const styles = createStyles((theme) => ({
   }
 }))
 
-class NewPuzzle extends Component {
+class ProcessPuzzle extends Component {
   static propTypes = {
     active: PropTypes.number,
     prevStep: PropTypes.func,
@@ -187,4 +187,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(NewPuzzle))
+)(withStyles(styles)(ProcessPuzzle))
