@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, colors } from '@material-ui/core'
 import config from '@/properties'
 
 import Box from '@material-ui/core/Box'
@@ -11,7 +11,7 @@ const FIELD_SIZE = 1024
 const useStyles = (cols) =>
   makeStyles((theme) => ({
     boxContainer: {
-      border: '1px solid #ccc',
+      border: '1px solid #777',
       padding: theme.spacing(1),
       boxSizing: 'content-box',
       display: 'flex',
@@ -26,14 +26,15 @@ const useStyles = (cols) =>
     },
     piece: {
       display: 'inline-flex',
-      width: FIELD_SIZE / cols - 2,
-      height: FIELD_SIZE / cols - 2,
-      borderRadius: 2
+      width: FIELD_SIZE / cols,
+      height: FIELD_SIZE / cols,
+      boxSizing: 'border-box',
+      borderRadius: 2,
+      border: '3px solid transparent'
     },
     active: {
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: theme.palette.secondary.light
+      borderColor: colors.yellow[700],
+      opacity: 0.7
     },
     thumb: {
       width: '100%',
@@ -47,7 +48,7 @@ export const PiecePlacer = (props) => {
   const resolveImg = (fileName) => `${SERVER_URL}/files/${fileName}`
   const pieces = props.pieces.map((piece, index) => (
     <Box
-      className={`${classes.piece} ${props.active === piece ? 'active' : ''}`}
+      className={`${classes.piece} ${props.active === index ? classes.active : ''}`}
       key={piece}
     >
       <img
@@ -65,5 +66,5 @@ PiecePlacer.propTypes = {
   pieces: PropTypes.array,
   handleClick: PropTypes.func,
   cols: PropTypes.number,
-  active: PropTypes.string
+  active: PropTypes.any
 }

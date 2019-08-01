@@ -17,7 +17,7 @@ import { PiecePlacer } from '@/components/UI/PiecePlacer'
 import { ImagePreview } from '@/components/UI/ImagePreview'
 
 import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
-import { prevPuzzleStep, nextPuzzleStep, selectPiece } from '@/store/actions'
+import { prevPuzzleStep, nextPuzzleStep, selectPiece, clearProcessedPuzzle, clearPuzzleStep } from '@/store/actions'
 import { SELECT_PICTURE, PUZZLE_OPTIONS, PIECES_PLACEMENT } from '@/enum/puzzleSteps.enum'
 import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
 import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
@@ -45,7 +45,13 @@ class ProcessPuzzle extends Component {
     classes: PropTypes.object,
     steps: PropTypes.array,
     form: PropTypes.any,
-    processedPuzzle: PropTypes.object
+    processedPuzzle: PropTypes.object,
+    handlePieceSelection: PropTypes.func
+  }
+
+  componentDidMount () {
+    this.props.clearPuzzle()
+    this.props.clearPuzzleStep()
   }
 
   alignColumnNumberToPuzzleSize = () => {
@@ -85,7 +91,8 @@ class ProcessPuzzle extends Component {
             <PiecePlacer
               pieces={this.props.processedPuzzle.piecesToSolve}
               cols={this.alignColumnNumberToPuzzleSize()}
-              handleClick={this.handlePieceSelection}
+              handleClick={this.props.handlePieceSelection}
+              active={this.props.processedPuzzle.currentPiece}
             />
           </Box>
         )
@@ -181,7 +188,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   nextStep: (step) => dispatch(nextPuzzleStep(step)),
   prevStep: (step) => dispatch(prevPuzzleStep(step)),
-  handlePieceSelection: (index) => dispatch(selectPiece(index))
+  handlePieceSelection: (index) => dispatch(selectPiece(index)),
+  clearPuzzle: () => dispatch(clearProcessedPuzzle()),
+  clearPuzzleStep: () => dispatch(clearPuzzleStep())
 })
 
 export default connect(

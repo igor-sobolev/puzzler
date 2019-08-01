@@ -23,7 +23,7 @@ const authHandler = (config) => {
 }
 
 const errorHandler = (error) => {
-  if (error.response.status !== 401) {
+  if (error && error.response && error.response.status !== 401 || !error.response) {
     let message =
       error && error.response && error.response.data && error.response.data.message
         ? error.response.data.message
@@ -34,7 +34,7 @@ const errorHandler = (error) => {
 }
 
 const authErrorHandler = (error) => {
-  if (error.response.status === 401) {
+  if (error && error.response && error.response.status === 401) {
     window.location.href = '/login'
     toastService.error('The session is over')
   }

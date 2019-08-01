@@ -1,5 +1,4 @@
-// import { stopSubmit, startSubmit } from 'redux-form' TODO: remove
-
+import { push } from 'connected-react-router'
 import * as actionTypes from './actionTypes'
 import * as puzzleSteps from '@/enum/puzzleSteps.enum'
 import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
@@ -67,6 +66,27 @@ const nextStep = () => {
 const prevStep = () => {
   return {
     type: actionTypes.PREV_PUZZLE_STEP
+  }
+}
+
+const saveSelectedPiece = (index) => {
+  return {
+    type: actionTypes.SAVE_SELECTED_PIECE,
+    index
+  }
+}
+
+const swapPieces = (index1, index2) => {
+  return {
+    type: actionTypes.SWAP_PIECES,
+    index1,
+    index2
+  }
+}
+
+export const clearProcessedPuzzle = () => {
+  return {
+    type: actionTypes.CLEAR_PROCESSED_PUZZLE
   }
 }
 
@@ -148,13 +168,22 @@ const fetchPuzzleImage = async (dispatch, getState) => {
 }
 
 const saveOptionsAndUpdatePuzzle = async (dispatch, getState) => {
-  dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
-  dispatch(createOrUpdatePuzzle())
+  try {
+    dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
+    dispatch(createOrUpdatePuzzle())
+    dispatch(nextStep())
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const saveOptionsAndGoBack = async (dispatch, getState) => {
-  dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
-  dispatch(prevStep())
+  try {
+    dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
+    dispatch(prevStep())
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 const createOrUpdatePuzzle = () => {
@@ -170,10 +199,21 @@ const createOrUpdatePuzzle = () => {
         ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, formData)
         : await PuzzlesAPI.createPuzzle(formData)
       dispatch(saveCreated(response.data))
-      dispatch(nextStep())
+    } catch (e) {
+      throw e
     } finally {
       dispatch(stopLoading())
     }
+  }
+}
+
+const finish = async (dispatch) => {
+  try {
+    dispatch(createOrUpdatePuzzle())
+    toastService.success('Puzzle was saved')
+    dispatch(push('/puzzles/my'))
+  } catch (e) {
+    console.log(e)
   }
 }
 
@@ -185,7 +225,7 @@ export const nextPuzzleStep = (currentStep) => {
       case puzzleSteps.PUZZLE_OPTIONS:
         return await saveOptionsAndUpdatePuzzle(dispatch, getState)
       case puzzleSteps.PIECES_PLACEMENT:
-        return // await updatePuzzlePlacement(dispatch, getState)
+        return await finish(dispatch, getState)
       default:
         throw new Error('Bad step')
     }
@@ -208,5 +248,9 @@ export const prevPuzzleStep = (currentStep) => {
 }
 
 export const selectPiece = (index) => {
-  console.log(index);
+  return async (dispatch, getState) => {
+    let puzzle = getState().puzzles.processedPuzzle
+    if (!puzzle.currentPiece) dispatch(saveSelectedPiece(index))
+    else dispatch(swapPieces(index, puzzle.currentPiece))
+  }
 }

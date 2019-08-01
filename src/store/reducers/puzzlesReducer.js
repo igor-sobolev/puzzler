@@ -57,6 +57,13 @@ const clearPuzzle = (state) => {
   }
 }
 
+const clearProcessedPuzzle = (state) => {
+  return {
+    ...state,
+    processedPuzzle: {}
+  }
+}
+
 const clearPuzzles = (state) => {
   return {
     ...state,
@@ -95,6 +102,32 @@ const saveCreated = (state, action) => {
   }
 }
 
+const saveSelectedPiece = (state, action) => {
+  return {
+    ...state,
+    processedPuzzle: {
+      ...state.processedPuzzle,
+      currentPiece: action.index
+    }
+  }
+}
+
+const swapPieces = (state, { index1, index2 }) => {
+  const swapped = state.processedPuzzle.piecesToSolve.slice()
+  const item1 = swapped[index1]
+  const item2 = swapped[index2]
+  swapped.splice(index1, 1, item2)
+  swapped.splice(index2, 1, item1)
+  return {
+    ...state,
+    processedPuzzle: {
+      ...state.processedPuzzle,
+      piecesToSolve: swapped,
+      currentPiece: null
+    }
+  }
+}
+
 const reducer = (state = initializeState(), action) => {
   switch (action.type) {
     case actionTypes.SAVE_PUZZLES:
@@ -111,12 +144,18 @@ const reducer = (state = initializeState(), action) => {
       return prevStep(state)
     case actionTypes.CLEAR_PUZZLE_STEP:
       return clearStep(state)
+    case actionTypes.CLEAR_PROCESSED_PUZZLE:
+      return clearProcessedPuzzle(state)
     case actionTypes.SAVE_PUZZLE_IMAGE_TO_MODEL:
       return saveImage(state, action)
     case actionTypes.SAVE_PUZZLE_OPTIONS_TO_MODEL:
       return saveOptions(state, action)
     case actionTypes.SAVE_CREATED_PUZZLE:
       return saveCreated(state, action)
+    case actionTypes.SAVE_SELECTED_PIECE:
+      return saveSelectedPiece(state, action)
+    case actionTypes.SWAP_PIECES:
+      return swapPieces(state, action)
     default:
       return state
   }
