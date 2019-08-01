@@ -7,7 +7,7 @@ const initializeState = () => {
     puzzle: null,
     puzzleStepActive: 0,
     puzzleSteps: [SELECT_PICTURE, PUZZLE_OPTIONS, PIECES_PLACEMENT],
-    newPuzzle: {}
+    processedPuzzle: {}
   }
 }
 
@@ -67,8 +67,8 @@ const clearPuzzles = (state) => {
 const saveImage = (state, action) => {
   return {
     ...state,
-    newPuzzle: {
-      ...state.newPuzzle,
+    processedPuzzle: {
+      ...state.processedPuzzle,
       image: action.image,
       file: action.file
     }
@@ -78,8 +78,8 @@ const saveImage = (state, action) => {
 const saveOptions = (state, action) => {
   return {
     ...state,
-    newPuzzle: {
-      ...state.newPuzzle,
+    processedPuzzle: {
+      ...state.processedPuzzle,
       ...action.options
     }
   }
@@ -88,8 +88,8 @@ const saveOptions = (state, action) => {
 const saveCreated = (state, action) => {
   return {
     ...state,
-    newPuzzle: {
-      ...state.newPuzzle,
+    processedPuzzle: {
+      ...state.processedPuzzle,
       ...action.data
     }
   }
@@ -116,7 +116,7 @@ const reducer = (state = initializeState(), action) => {
     case actionTypes.SAVE_PUZZLE_OPTIONS_TO_MODEL:
       return saveOptions(state, action)
     case actionTypes.SAVE_CREATED_PUZZLE:
-        return saveCreated(state, action)
+      return saveCreated(state, action)
     default:
       return state
   }

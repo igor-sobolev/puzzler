@@ -22,13 +22,12 @@ const useStyles = (cols) =>
       width: FIELD_SIZE,
       borderRadius: 4,
       overflow: 'hidden',
-      transform: 'scale(0.5) translate(-50%, -50%)'
+      transform: 'scale(0.35)'
     },
     piece: {
-      lol: console.log(FIELD_SIZE, cols, FIELD_SIZE / cols - 4),
       display: 'inline-flex',
-      width: FIELD_SIZE / cols - 4,
-      height: FIELD_SIZE / cols - 4,
+      width: FIELD_SIZE / cols - 2,
+      height: FIELD_SIZE / cols - 2,
       borderRadius: 2
     },
     active: {
@@ -55,6 +54,7 @@ export const PiecePlacer = (props) => {
         src={resolveImg(piece)}
         className={classes.thumb}
         onClick={() => props.handleClick(index)}
+        alt="piece"
       ></img>
     </Box>
   ))

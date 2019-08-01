@@ -31,10 +31,6 @@ class UploadForm extends Component {
     this.props.handleSubmit()
   }
 
-  // componentDidMount () {
-  //   this.props.initialize(this.props.initFiles)
-  // }
-
   buttons = () => {
     return this.props.disableButtons ? null : (
       <Grid
@@ -67,7 +63,10 @@ class UploadForm extends Component {
 
   render () {
     return (
-      <form onSubmit={this.onSubmitHandler}>
+      <form
+        onSubmit={this.onSubmitHandler}
+        style={{ width: '100%' }}
+      >
         <div>
           <label
             htmlFor={FILE_FIELD_NAME}

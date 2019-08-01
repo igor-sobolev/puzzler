@@ -4,12 +4,21 @@ import PropTypes from 'prop-types'
 import { makeStyles, colors, Fab } from '@material-ui/core'
 import RemoveIcon from '@material-ui/icons/Clear'
 
+import { ImagePreview } from '@/components/UI/ImagePreview'
+
 import { addThumbnails } from '@/util/files'
 
 const maxSizeInBytes = 15728640 // 15mb
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 600
+  },
   dropArea: {
+    width: '100%',
     border: '2px dashed #ccc',
     padding: 20,
     outline: 'none',
@@ -24,12 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
   preview: {
     position: 'relative',
-    marginBottom: theme.spacing(2)
-  },
-  previewImage: {
-    width: '100%',
-    maxHeight: '60vh',
-    objectFit: 'cover'
+    marginBottom: theme.spacing(2),
+    justifyContent: 'center',
+    display: 'inline-flex'
   },
   removeBtn: {
     position: 'absolute',
@@ -59,11 +65,11 @@ export const CustomDropzone = (props) => {
   })
 
   const thumbs = files.map((file, index) => (
-    <img
+    <ImagePreview
       key={index}
       src={file.preview}
-      className={classes.previewImage}
-      alt="preview"
+      height={300}
+      width={300}
     />
   ))
 
@@ -90,7 +96,7 @@ export const CustomDropzone = (props) => {
   }, [])
 
   return (
-    <section className="container">
+    <section className={classes.container}>
       {!files.length ? (
         <div
           {...getRootProps({

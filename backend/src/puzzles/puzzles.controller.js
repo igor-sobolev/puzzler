@@ -10,7 +10,7 @@ router.get('/current', getCurrentUserPuzzles)
 router.get('/:puzzleId', getById)
 router.post('/:puzzleId/vote', vote)
 router.post('/', upload.single('file'), create)
-// router.put('/:id', update)
+router.put('/:puzzleId', checkAuthor, update)
 // router.delete('/:id', _delete)
 
 function getAll (req, res, next) {
@@ -51,17 +51,23 @@ function getById (req, res, next) {
     .catch((err) => next(err))
 }
 
-// function update (req, res, next) {
-//   if (req.params.id !== req.user.sub) {
-//     res.status(403).json({
-//       message: 'Access denied'
-//     })
-//   }
-//   puzzlesService
-//     .update(req.params.id, req.body)
-//     .then(() => res.json({}))
-//     .catch((err) => next(err))
-// }
+function checkAuthor (req, res, next) {
+  let userId = req.user.sub
+  let puzzleId = req.params.puzzleId
+  puzzlesService
+    .checkAuthor(userId, puzzleId)
+    .then((check) => {
+      return check ? next() : res.sendStatus(403)
+    })
+    .catch((err) => next(err))
+}
+
+function update (req, res, next) {
+  puzzlesService
+    .update(req.params.puzzleId, req.body)
+    .then(() => res.json({}))
+    .catch((err) => next(err))
+}
 
 // function _delete (req, res, next) {
 //   puzzlesService

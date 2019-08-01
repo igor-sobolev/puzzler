@@ -80,6 +80,7 @@ class PuzzleForm extends Component {
               id="puzzleSize"
               autoComplete="puzzleSize"
               options={sizes}
+              disabled={!!this.props.initData._id}
               component={CustomSelect}
             />
           </Grid>

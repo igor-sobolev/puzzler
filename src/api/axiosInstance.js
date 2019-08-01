@@ -23,15 +23,26 @@ const authHandler = (config) => {
 }
 
 const errorHandler = (error) => {
-  let message =
-    error && error.response && error.response.data && error.response.data.message
-      ? error.response.data.message
-      : 'Something went wrong!'
-  toastService.error(message)
+  if (error.response.status !== 401) {
+    let message =
+      error && error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : 'Something went wrong!'
+    toastService.error(message)
+  }
+  return Promise.reject(error)
+}
+
+const authErrorHandler = (error) => {
+  if (error.response.status === 401) {
+    window.location.href = '/login'
+    toastService.error('The session is over')
+  }
   return Promise.reject(error)
 }
 
 instance.interceptors.request.use(authHandler)
 instance.interceptors.response.use(null, errorHandler)
+instance.interceptors.response.use(null, authErrorHandler)
 
 export default instance

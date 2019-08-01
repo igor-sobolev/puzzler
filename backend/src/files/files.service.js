@@ -56,7 +56,7 @@ async function extractPieces (imageBuffer, pieceSize, nameWithExt) {
       }`
       let jointPath = path.join(uploadsDir, pieceFileName)
       await image
-        .extract({ left: i, top: j, width: pieceSize, height: pieceSize })
+        .extract({ left: j, top: i, width: pieceSize, height: pieceSize })
         .toFile(jointPath)
       files.push(pieceFileName)
     }

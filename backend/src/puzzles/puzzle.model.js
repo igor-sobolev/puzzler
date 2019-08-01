@@ -7,6 +7,7 @@ const puzzleSchema = new Schema({
   name: { type: String, unique: true, required: true },
   size: { type: String, required: true },
   description: { type: String },
+  preview: { type: String },
   solution: { type: Array },
   piecesToSolve: { type: Array },
   isDeleted: { type: String, default: false },

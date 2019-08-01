@@ -14,9 +14,10 @@ export default {
   getById,
   vote,
   getAllByUserId,
-  create
-  // update,
-  // delete: _delete
+  create,
+  checkAuthor,
+  update,
+  delete: _delete
 }
 
 async function vote (puzzleId, userId, rating) {
@@ -24,7 +25,6 @@ async function vote (puzzleId, userId, rating) {
     author: userId,
     puzzle: puzzleId
   })
-  console.log('user vote: ', userVote)
   if (userVote) {
     userVote.rating = rating
   } else {
@@ -48,11 +48,17 @@ async function create (payload, userId, imageFileName) {
     ...payload,
     author: userId,
     solution: images,
-    piecesToSolve: images
+    piecesToSolve: images,
+    preview: imageFileName
   })
   let saved = await puzzle.save()
   let { solution, ...withoutSolution } = saved.toObject()
   return withoutSolution
+}
+
+async function checkAuthor (userId, puzzleId) {
+  const puzzle = await Puzzle.findById(ObjectId(puzzleId))
+  return puzzle.author.equals(userId)
 }
 
 async function getAll (userId) {
@@ -138,29 +144,26 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
   return Puzzle.populate(aggregated, { path: 'author' })
 }
 
-// async function update (id, userParam) {
-//   const user = await User.findById(id)
+async function update (puzzleId, data) {
+  const puzzle = await Puzzle.findById(puzzleId)
 
-//   // validate
-//   if (!user) throw 'User not found'
-//   if (
-//     user.email !== userParam.email &&
-//     (await User.findOne({ email: userParam.email }))
-//   ) {
-//     throw 'Username "' + userParam.email + '" is already taken'
-//   }
+  // validate
+  if (!puzzle) throw 'Puzzle not found'
 
-//   // hash password if it was entered
-//   if (userParam.password) {
-//     userParam.hash = bcrypt.hashSync(userParam.password, 10)
-//   }
+  // copy properties
+  Object.assign(puzzle, data)
 
-//   // copy userParam properties to user
-//   Object.assign(user, userParam)
+  return await puzzle.save()
+}
 
-//   return await user.save()
-// }
+async function _delete (puzzleId) {
+  const puzzle = await Puzzle.findById(puzzleId)
 
-// async function _delete (id) {
-//   await User.findByIdAndRemove(id)
-// }
+  // validate
+  if (!puzzle) throw 'Puzzle not found'
+
+  // copy properties
+  Object.assign(puzzle, { isDeleted: true })
+
+  return await puzzle.save()
+}

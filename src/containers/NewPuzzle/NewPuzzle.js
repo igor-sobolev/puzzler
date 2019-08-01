@@ -6,6 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
 import { createStyles, withStyles } from '@material-ui/core'
 
 import { PageLayout } from '@/components/UI/PageLayout'
@@ -13,9 +14,10 @@ import { StepsHeading } from '@/components/UI/StepsHeading'
 import { UploadForm } from '@/containers/Forms/UploadForm'
 import { PuzzleForm } from '@/containers/Forms/PuzzleForm'
 import { PiecePlacer } from '@/components/UI/PiecePlacer'
+import { ImagePreview } from '@/components/UI/ImagePreview'
 
 import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
-import { prevPuzzleStep, nextPuzzleStep } from '@/store/actions'
+import { prevPuzzleStep, nextPuzzleStep, selectPiece } from '@/store/actions'
 import { SELECT_PICTURE, PUZZLE_OPTIONS, PIECES_PLACEMENT } from '@/enum/puzzleSteps.enum'
 import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
 import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
@@ -23,6 +25,15 @@ import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.
 const styles = createStyles((theme) => ({
   btn: {
     margin: theme.spacing(1)
+  },
+  content: {
+    width: 500,
+    height: 400,
+    maxWidth: '100%',
+    padding: theme.spacing(0, 2),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }))
 
@@ -34,11 +45,11 @@ class NewPuzzle extends Component {
     classes: PropTypes.object,
     steps: PropTypes.array,
     form: PropTypes.any,
-    newPuzzle: PropTypes.object
+    processedPuzzle: PropTypes.object
   }
 
   alignColumnNumberToPuzzleSize = () => {
-    const size = this.props.newPuzzle.size
+    const size = this.props.processedPuzzle.size
     switch (size) {
       case SMALL:
         return SMALL_PIECES
@@ -54,20 +65,29 @@ class NewPuzzle extends Component {
   getStepContent = () => {
     switch (this.props.steps[this.props.active]) {
       case SELECT_PICTURE:
-        return (
+        return !this.props.processedPuzzle._id ? (
           <UploadForm
             disableButtons={true}
-            initFiles={this.props.newPuzzle.file ? [this.props.newPuzzle.file] : null}
+            initFiles={this.props.processedPuzzle.file ? [this.props.processedPuzzle.file] : null}
+          />
+        ) : (
+          <ImagePreview
+            preview={this.props.processedPuzzle.preview}
+            height={300}
+            width={300}
           />
         )
       case PUZZLE_OPTIONS:
-        return <PuzzleForm initData={this.props.newPuzzle} />
+        return <PuzzleForm initData={this.props.processedPuzzle} />
       case PIECES_PLACEMENT:
         return (
-          <PiecePlacer
-            pieces={this.props.newPuzzle.piecesToSolve}
-            cols={this.alignColumnNumberToPuzzleSize()}
-          />
+          <Box>
+            <PiecePlacer
+              pieces={this.props.processedPuzzle.piecesToSolve}
+              cols={this.alignColumnNumberToPuzzleSize()}
+              handleClick={this.handlePieceSelection}
+            />
+          </Box>
         )
       default:
         return null
@@ -77,10 +97,13 @@ class NewPuzzle extends Component {
   canGoNext = () => {
     switch (this.props.steps[this.props.active]) {
       case SELECT_PICTURE:
-        return !(
-          this.props.form &&
-          this.props.form[UPLOAD_FORM_NAME] &&
-          this.props.form[UPLOAD_FORM_NAME].syncErrors
+        return (
+          !(
+            this.props.form &&
+            this.props.form[UPLOAD_FORM_NAME] &&
+            this.props.form[UPLOAD_FORM_NAME].syncErrors
+          ) ||
+          (this.props.processedPuzzle._id && this.props.processedPuzzle.preview)
         )
       case PUZZLE_OPTIONS:
         return !(
@@ -107,7 +130,7 @@ class NewPuzzle extends Component {
 
   render () {
     return (
-      <PageLayout title="Create puzzle">
+      <PageLayout title="Set up puzzle">
         <Container maxWidth="md">
           <Card>
             <CardContent>
@@ -116,7 +139,7 @@ class NewPuzzle extends Component {
                 active={this.props.active}
                 completed={this.props.steps.slice(0, this.props.active)}
               />
-              <Container maxWidth="xs">{this.getStepContent()}</Container>
+              <Container className={this.props.classes.content}>{this.getStepContent()}</Container>
               <Grid
                 container
                 justify="flex-end"
@@ -152,12 +175,13 @@ const mapStateToProps = (state) => ({
   active: state.puzzles.puzzleStepActive,
   steps: state.puzzles.puzzleSteps,
   form: state.form,
-  newPuzzle: state.puzzles.newPuzzle
+  processedPuzzle: state.puzzles.processedPuzzle
 })
 
 const mapDispatchToProps = (dispatch) => ({
   nextStep: (step) => dispatch(nextPuzzleStep(step)),
-  prevStep: (step) => dispatch(prevPuzzleStep(step))
+  prevStep: (step) => dispatch(prevPuzzleStep(step)),
+  handlePieceSelection: (index) => dispatch(selectPiece(index))
 })
 
 export default connect(

@@ -27,10 +27,11 @@ async function isRevoked (req, payload, done) {
 }
 
 /**
- * Requires userId as parameter
+ * Checks given parameter if it's current user's id
  */
-export const currentUserOnly = (field) => (req, res, next) => {
-  if (req.params[field] !== req.user.sub) {
+export const currentUserOnly = (field, isInBody = false) => (req, res, next) => {
+  let body = req.body
+  if (!isInBody && req.params[field] !== req.user.sub || isInBody && body[field] !== req.user.sub) {
     res.status(403).json({
       message: 'Access denied'
     })

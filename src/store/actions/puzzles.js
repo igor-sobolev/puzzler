@@ -126,17 +126,20 @@ export const voteForPuzzle = ({ puzzleId, rating }) => {
 }
 
 export const editPuzzle = (puzzle) => {
-  console.log('edit')
+  console.log('edit', puzzle)
 }
 
 export const deletePuzzle = (puzzle) => {
-  console.log('delete')
+  console.log('delete', puzzle)
 }
 
 const fetchPuzzleImage = async (dispatch, getState) => {
   try {
-    const [file] = getState().form[UPLOAD_FORM_NAME].values.files
-    dispatch(savePuzzleImageToModel({ file }))
+    let puzzle = getState().puzzles.processedPuzzle
+    if (!puzzle._id) {
+      const [file] = getState().form[UPLOAD_FORM_NAME].values.files
+      dispatch(savePuzzleImageToModel({ file }))
+    }
     dispatch(nextStep())
   } catch (e) {
     console.log(e)
@@ -144,9 +147,9 @@ const fetchPuzzleImage = async (dispatch, getState) => {
   }
 }
 
-const saveOptionsAndCreatePuzzle = async (dispatch, getState) => {
+const saveOptionsAndUpdatePuzzle = async (dispatch, getState) => {
   dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
-  dispatch(createPuzzle())
+  dispatch(createOrUpdatePuzzle())
 }
 
 const saveOptionsAndGoBack = async (dispatch, getState) => {
@@ -154,15 +157,18 @@ const saveOptionsAndGoBack = async (dispatch, getState) => {
   dispatch(prevStep())
 }
 
-const createPuzzle = () => {
+const createOrUpdatePuzzle = () => {
   return async (dispatch, getState) => {
     try {
-      const { file, ...data } = getState().puzzles.newPuzzle
+      let processedPuzzle = getState().puzzles.processedPuzzle
+      const { file, ...data } = processedPuzzle
       const formData = new FormData()
       formData.append('file', file)
       formData.append('data', JSON.stringify(data))
       dispatch(startLoading())
-      let response = await PuzzlesAPI.createPuzzle(formData)
+      let response = processedPuzzle._id
+        ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, formData)
+        : await PuzzlesAPI.createPuzzle(formData)
       dispatch(saveCreated(response.data))
       dispatch(nextStep())
     } finally {
@@ -177,7 +183,7 @@ export const nextPuzzleStep = (currentStep) => {
       case puzzleSteps.SELECT_PICTURE:
         return await fetchPuzzleImage(dispatch, getState)
       case puzzleSteps.PUZZLE_OPTIONS:
-        return await saveOptionsAndCreatePuzzle(dispatch, getState)
+        return await saveOptionsAndUpdatePuzzle(dispatch, getState)
       case puzzleSteps.PIECES_PLACEMENT:
         return // await updatePuzzlePlacement(dispatch, getState)
       default:
@@ -199,4 +205,8 @@ export const prevPuzzleStep = (currentStep) => {
         throw new Error('Bad step')
     }
   }
+}
+
+export const selectPiece = (index) => {
+  console.log(index);
 }
