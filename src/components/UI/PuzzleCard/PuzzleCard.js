@@ -100,14 +100,15 @@ export const PuzzleCard = (props) => {
             View more
           </Button>
         </Link>
-
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-        >
-          Try it now!
-        </Button>
+        <Link to={`/puzzles/${props.puzzle._id}/play`}>
+          <Button
+            size="small"
+            color="primary"
+            variant="contained"
+          >
+            Try it now!
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   )

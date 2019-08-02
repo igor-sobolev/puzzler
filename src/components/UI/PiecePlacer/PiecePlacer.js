@@ -6,31 +6,29 @@ import config from '@/properties'
 import Box from '@material-ui/core/Box'
 
 const { SERVER_URL } = config
-const FIELD_SIZE = 1024
 
 const useStyles = (cols) =>
   makeStyles((theme) => ({
     boxContainer: {
       border: '1px solid #777',
-      padding: theme.spacing(1),
+      padding: 2,
       boxSizing: 'content-box',
       display: 'flex',
       flexWrap: 'wrap',
       justifyContent: 'space-between',
       alignItems: 'space-between',
-      height: FIELD_SIZE,
-      width: FIELD_SIZE,
       borderRadius: 4,
+      maxHeight: 400,
+      maxWidth: 400,
       overflow: 'hidden',
-      transform: 'scale(0.35)'
     },
     piece: {
       display: 'inline-flex',
-      width: FIELD_SIZE / cols,
-      height: FIELD_SIZE / cols,
+      width: `calc(${100 / cols}%)`,
+      height: `calc(${100 / cols}%)`,
       boxSizing: 'border-box',
       borderRadius: 2,
-      border: '3px solid transparent'
+      border: '1px solid transparent'
     },
     active: {
       borderColor: colors.yellow[700],

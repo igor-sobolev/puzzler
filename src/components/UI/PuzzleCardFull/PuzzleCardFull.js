@@ -131,13 +131,15 @@ export const PuzzleCardFull = (props) => {
         >
           Leaderboard
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-        >
-          Play
-        </Button>
+        <Link to={`/puzzles/${props.puzzle._id}/play`}>
+          <Button
+            size="small"
+            color="primary"
+            variant="contained"
+          >
+            Play
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   )

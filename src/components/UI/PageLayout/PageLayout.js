@@ -14,12 +14,10 @@ const styles = (theme) => ({
 })
 
 const PageLayout = (props) => (
-  <React.Fragment>
-    <article className={props.classes.container}>
-      <PageHeading>{props.title}</PageHeading>
-      {props.children}
-    </article>
-  </React.Fragment>
+  <article className={props.classes.container}>
+    <PageHeading>{props.title}</PageHeading>
+    {props.children}
+  </article>
 )
 
 PageLayout.propTypes = {

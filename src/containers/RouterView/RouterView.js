@@ -29,6 +29,10 @@ const LazyPuzzle = React.lazy(() =>
   import('@/containers/Puzzle').then((module) => ({ default: module.Puzzle }))
 )
 
+const LazyPlay = React.lazy(() =>
+  import('@/containers/Playground').then((module) => ({ default: module.Playground }))
+)
+
 const LazyUser = React.lazy(() =>
   import('@/containers/UserProfile').then((module) => ({ default: module.UserProfile }))
 )
@@ -45,11 +49,13 @@ class RouterView extends Component {
     return (
       <Suspense fallback={<Spinner />}>
         <Switch>
-          {this.isAuthenticated() ? <Route
-            path="/puzzles/my"
-            exact
-            component={LazyMyPuzzles}
-          /> : null}
+          {this.isAuthenticated() ? (
+            <Route
+              path="/puzzles/my"
+              exact
+              component={LazyMyPuzzles}
+            />
+          ) : null}
           <Route
             path="/login"
             exact
@@ -84,6 +90,11 @@ class RouterView extends Component {
             path="/puzzles/:pid"
             exact
             component={LazyPuzzle}
+          />
+          <Route
+            path="/puzzles/:pid/play"
+            exact
+            component={LazyPlay}
           />
           <Redirect
             to="/puzzles"

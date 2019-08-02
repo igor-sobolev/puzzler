@@ -102,11 +102,12 @@ export const loadAllPuzzles = () => {
   return async (dispatch) => {
     try {
       dispatch(clearPuzzles())
+      dispatch(startLoading())
       let response = await PuzzlesAPI.loadAllPuzzles()
       let puzzles = response.data
       dispatch(savePuzzles({ puzzles }))
-    } catch (e) {
-      console.log(e)
+    } finally {
+      dispatch(stopLoading())
     }
   }
 }
@@ -115,11 +116,12 @@ export const loadAllUserPuzzles = () => {
   return async (dispatch) => {
     try {
       dispatch(clearPuzzles())
+      dispatch(startLoading())
       let response = await PuzzlesAPI.loadAllUserPuzzles()
       let puzzles = response.data
       dispatch(savePuzzles({ puzzles }))
-    } catch (e) {
-      console.log(e)
+    } finally {
+      dispatch(stopLoading())
     }
   }
 }
@@ -128,11 +130,12 @@ export const loadPuzzleById = (id) => {
   return async (dispatch) => {
     try {
       dispatch(clearPuzzle())
+      dispatch(startLoading())
       let response = await PuzzlesAPI.loadPuzzleById(id)
       let puzzle = response.data
       dispatch(savePuzzle({ puzzle }))
-    } catch (e) {
-      console.log(e)
+    } finally {
+      dispatch(stopLoading())
     }
   }
 }

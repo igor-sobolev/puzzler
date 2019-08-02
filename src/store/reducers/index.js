@@ -6,6 +6,7 @@ import authReducer from '@/store/reducers/authReducer'
 import profileReducer from '@/store/reducers/profileReducer'
 import puzzlesReducer from '@/store/reducers/puzzlesReducer'
 import sharedReducer from '@/store/reducers/sharedReducer'
+import playgroundReducer from '@/store/reducers/playgroundReducer'
 
 export default (history) => {
   return combineReducers({
@@ -13,6 +14,7 @@ export default (history) => {
     profile: profileReducer,
     puzzles: puzzlesReducer,
     shared: sharedReducer,
+    playground: playgroundReducer,
     form: formReducer,
     router: connectRouter(history)
   })
