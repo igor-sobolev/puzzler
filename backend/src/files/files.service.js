@@ -26,7 +26,12 @@ async function getFile (filename) {
     throw 'Forbidden'
   }
   var type = mime[path.extname(file).slice(1)] || 'text/plain'
-  return { stream: fs.createReadStream(file), type }
+  if (fs.existsSync(file)) {
+    let stream = fs.createReadStream(file)
+    return { stream, type }
+  } else {
+    return null
+  }
 }
 
 async function remove (filename) {

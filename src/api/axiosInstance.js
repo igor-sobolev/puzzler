@@ -23,7 +23,7 @@ const authHandler = (config) => {
 }
 
 const errorHandler = (error) => {
-  if (error && error.response && error.response.status !== 401 || !error.response) {
+  if ((error && error.response && error.response.status !== 401) || !error.response) {
     let message =
       error && error.response && error.response.data && error.response.data.message
         ? error.response.data.message

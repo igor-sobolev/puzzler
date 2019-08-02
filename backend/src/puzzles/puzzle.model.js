@@ -10,7 +10,7 @@ const puzzleSchema = new Schema({
   preview: { type: String },
   solution: { type: Array },
   piecesToSolve: { type: Array },
-  isDeleted: { type: String, default: false },
+  isDeleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now }
 })
 

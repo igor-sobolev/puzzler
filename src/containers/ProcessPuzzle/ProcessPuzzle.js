@@ -46,7 +46,9 @@ class ProcessPuzzle extends Component {
     steps: PropTypes.array,
     form: PropTypes.any,
     processedPuzzle: PropTypes.object,
-    handlePieceSelection: PropTypes.func
+    handlePieceSelection: PropTypes.func,
+    clearPuzzle: PropTypes.func,
+    clearPuzzleStep: PropTypes.func
   }
 
   componentDidMount () {

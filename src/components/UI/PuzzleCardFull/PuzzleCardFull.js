@@ -7,6 +7,8 @@ import { Card, Typography, CardActions, Button, CardContent, Box } from '@materi
 
 import { Rating } from '@/components/UI/Rating'
 
+import { resolveImage } from '@/util/files'
+
 const useStyles = makeStyles((theme) => ({
   image: {
     maxWidth: '100%',
@@ -56,7 +58,7 @@ export const PuzzleCardFull = (props) => {
             md={6}
           >
             <img
-              src="https://cdn.pixabay.com/photo/2018/06/14/13/34/puzzle-3474867_960_720.jpg"
+              src={resolveImage(props.puzzle.preview)}
               alt="Preview"
               className={classes.image}
               title={props.puzzle.name}

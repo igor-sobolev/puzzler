@@ -100,9 +100,12 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
         _id: '$_id',
         author: { $first: '$author' },
         name: { $first: '$name' },
+        description: { $first: '$description' },
         size: { $first: '$size' },
+        preview: { $first: '$preview' },
         createdDate: { $first: '$createdDate' },
         votes: { $push: '$votes' },
+        piecesToSolve: { $push: '$piecesToSolve' },
         isVoted: { $max: { $eq: ['$votes.author', ObjectId(userId)] } },
         rating: {
           $avg: '$votes.rating'

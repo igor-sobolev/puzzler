@@ -25,7 +25,7 @@ import { PageLayout } from '@/components/UI/PageLayout'
 import { UserInfo } from '@/components/UI/UserInfo'
 import { UploadDialog } from '@/components/Dialogs/UploadDialog'
 
-const { SERVER_URL } = config
+import { resolveImage } from '@/util/files'
 
 const styles = createStyles((theme) => ({
   profileCard: {
@@ -69,10 +69,6 @@ class UserProfile extends Component {
     this.props.loadProfile(this.props.match.params.id)
   }
 
-  resolveAvatar = () => {
-    return this.props.user.avatar ? `${SERVER_URL}/files/${this.props.user.avatar}` : null
-  }
-
   isCurrentUser = () => {
     return (
       this.props.authenticatedUser &&
@@ -107,7 +103,7 @@ class UserProfile extends Component {
               >
                 <Grid item>
                   <UserAvatar
-                    image={this.resolveAvatar()}
+                    image={resolveImage(this.props.user.avatar)}
                     onUpload={this.props.openUploadAvatarDialog}
                     isCurrentUser={this.isCurrentUser()}
                   />

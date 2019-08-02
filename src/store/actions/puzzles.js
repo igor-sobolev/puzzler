@@ -2,6 +2,7 @@ import { push } from 'connected-react-router'
 import * as actionTypes from './actionTypes'
 import * as puzzleSteps from '@/enum/puzzleSteps.enum'
 import { UPLOAD_FORM_NAME, PUZZLE_FORM_NAME } from '@/enum/forms.enum'
+import isNumber from 'lodash/isNumber'
 
 import PuzzlesAPI from '@/api/PuzzlesAPI'
 
@@ -32,6 +33,7 @@ const savePuzzles = (data) => {
 }
 
 const saveCreated = (data) => {
+  // or updated
   return {
     type: actionTypes.SAVE_CREATED_PUZZLE,
     data
@@ -170,10 +172,13 @@ const fetchPuzzleImage = async (dispatch, getState) => {
 const saveOptionsAndUpdatePuzzle = async (dispatch, getState) => {
   try {
     dispatch(savePuzzleOptionsToModel({ options: getState().form[PUZZLE_FORM_NAME].values }))
-    dispatch(createOrUpdatePuzzle())
+    let processedPuzzle = getState().puzzles.processedPuzzle
+    dispatch(startLoading())
+    let data = await createOrUpdatePuzzle(processedPuzzle)
+    dispatch(saveCreated(data))
     dispatch(nextStep())
-  } catch (e) {
-    console.log(e)
+  } finally {
+    dispatch(stopLoading())
   }
 }
 
@@ -186,34 +191,26 @@ const saveOptionsAndGoBack = async (dispatch, getState) => {
   }
 }
 
-const createOrUpdatePuzzle = () => {
-  return async (dispatch, getState) => {
-    try {
-      let processedPuzzle = getState().puzzles.processedPuzzle
-      const { file, ...data } = processedPuzzle
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('data', JSON.stringify(data))
-      dispatch(startLoading())
-      let response = processedPuzzle._id
-        ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, formData)
-        : await PuzzlesAPI.createPuzzle(formData)
-      dispatch(saveCreated(response.data))
-    } catch (e) {
-      throw e
-    } finally {
-      dispatch(stopLoading())
-    }
-  }
+const createOrUpdatePuzzle = async (processedPuzzle) => {
+  const { file, ...data } = processedPuzzle
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('data', JSON.stringify(data))
+  let response = processedPuzzle._id
+    ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, formData)
+    : await PuzzlesAPI.createPuzzle(formData)
+  return response.data
 }
 
-const finish = async (dispatch) => {
+const finish = async (dispatch, getState) => {
   try {
-    dispatch(createOrUpdatePuzzle())
+    let processedPuzzle = getState().puzzles.processedPuzzle
+    dispatch(startLoading())
+    await createOrUpdatePuzzle(processedPuzzle)
     toastService.success('Puzzle was saved')
     dispatch(push('/puzzles/my'))
-  } catch (e) {
-    console.log(e)
+  } finally {
+    dispatch(stopLoading())
   }
 }
 
@@ -250,7 +247,7 @@ export const prevPuzzleStep = (currentStep) => {
 export const selectPiece = (index) => {
   return async (dispatch, getState) => {
     let puzzle = getState().puzzles.processedPuzzle
-    if (!puzzle.currentPiece) dispatch(saveSelectedPiece(index))
+    if (!isNumber(puzzle.currentPiece)) dispatch(saveSelectedPiece(index))
     else dispatch(swapPieces(index, puzzle.currentPiece))
   }
 }

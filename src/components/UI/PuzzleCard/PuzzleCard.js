@@ -14,6 +14,8 @@ import {
 
 import { Rating } from '@/components/UI/Rating'
 
+import { resolveImage } from '@/util/files'
+
 const useStyles = makeStyles((theme) => ({
   headingContainer: {
     position: 'relative'
@@ -62,7 +64,7 @@ export const PuzzleCard = (props) => {
           component="img"
           alt="Puzzle Preview"
           height="150"
-          image="https://cdn.pixabay.com/photo/2018/06/14/13/34/puzzle-3474867_960_720.jpg"
+          image={resolveImage(props.puzzle.preview)}
           title={props.puzzle.name}
         />
       </Box>

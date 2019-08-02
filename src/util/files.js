@@ -1,4 +1,7 @@
 import q from 'q'
+import config from '@/properties'
+
+const { SERVER_URL } = config
 
 export const readAsBase64 = (file) => {
   let deferred = q.defer()
@@ -17,3 +20,5 @@ export const addThumbnails = (array) => {
     })
   )
 }
+
+export const resolveImage = (name) => name ? `${SERVER_URL}/files/${name}` : null
