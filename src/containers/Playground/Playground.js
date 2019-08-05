@@ -11,7 +11,8 @@ import Button from '@material-ui/core/Button'
 import { PageLayout } from '@/components/UI/PageLayout'
 import { PiecePlacer } from '@/components/UI/PiecePlacer'
 
-import { loadPuzzleById, startGame } from '@/store/actions'
+import { loadPuzzleById, startGame, clearPlayground, selectGamePiece } from '@/store/actions'
+import { resolveImage } from '@/util/files'
 
 import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
 import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
@@ -26,7 +27,6 @@ const styles = createStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: 'rgba(222, 227, 222, 0.3)',
     padding: theme.spacing(1),
     zIndex: 20
   },
@@ -40,6 +40,18 @@ const styles = createStyles((theme) => ({
     height: 400,
     maxWidth: '100%',
     textAlign: 'center'
+  },
+  preview: {
+    zIndex: -1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: `calc(100% - ${theme.spacing(2) * 2}px)`,
+    height: `calc(100% - ${theme.spacing(2) * 2}px)`,
+    boxSizing: 'border-box',
+    objectFit: 'cover',
+    opacity: 0.2,
+    margin: theme.spacing(2)
   }
 }))
 
@@ -48,12 +60,17 @@ class Playground extends Component {
     match: PropTypes.object,
     loadPuzzleById: PropTypes.func,
     handleStart: PropTypes.func,
+    clear: PropTypes.func,
     puzzle: PropTypes.object,
     classes: PropTypes.object,
-    isStarted: PropTypes.bool
+    isStarted: PropTypes.bool,
+    pieces: PropTypes.array,
+    activePiece: PropTypes.number,
+    selectPiece: PropTypes.func
   }
 
   componentDidMount () {
+    this.props.clear()
     this.props.loadPuzzleById(this.props.match.params.pid)
   }
 
@@ -80,6 +97,10 @@ class Playground extends Component {
               <CardContent>
                 {!this.props.isStarted ? (
                   <Box className={this.props.classes.startOverlay}>
+                    <img
+                      src={resolveImage(this.props.puzzle.preview)}
+                      className={this.props.classes.preview}
+                    />
                     <Button
                       color="secondary"
                       variant="contained"
@@ -93,7 +114,7 @@ class Playground extends Component {
                   <PiecePlacer
                     pieces={this.props.pieces}
                     cols={this.alignColumnNumberToPuzzleSize()}
-                    handleClick={() => console.log('click')}
+                    handleClick={this.props.selectPiece}
                     active={this.props.activePiece}
                   />
                 ) : null}
@@ -111,12 +132,15 @@ class Playground extends Component {
 const mapStateToProps = (state) => ({
   puzzle: state.puzzles.puzzle,
   isStarted: state.playground.isStarted,
-  pieces: state.playground.pieces
+  pieces: state.playground.pieces,
+  activePiece: state.playground.activePiece
 })
 
 const mapDispatchToProps = (dispatch) => ({
   loadPuzzleById: (id) => dispatch(loadPuzzleById(id)),
-  handleStart: (puzzle) => dispatch(startGame(puzzle))
+  handleStart: (puzzle) => dispatch(startGame(puzzle)),
+  clear: () => dispatch(clearPlayground()),
+  selectPiece: (piece) => dispatch(selectGamePiece(piece))
 })
 
 export default connect(

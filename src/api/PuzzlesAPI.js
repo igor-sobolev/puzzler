@@ -24,6 +24,10 @@ class PuzzlesAPI {
   static updatePuzzle (id, data) {
     return axios.put(`/puzzles/${id}`, data)
   }
+
+  static checkSolution (id, data) {
+    return axios.put(`/puzzles/${id}/solution`, data)
+  }
 }
 
 export default PuzzlesAPI
