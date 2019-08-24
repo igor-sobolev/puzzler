@@ -29,7 +29,9 @@ import { resolveImage } from '@/util/files'
 const styles = createStyles((theme) => ({
   profileCard: {
     position: 'relative',
-    overflow: 'visible'
+    overflow: 'visible',
+    maxWidth: '100%',
+    width: 500
   },
   editBtn: {
     position: 'absolute',

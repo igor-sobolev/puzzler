@@ -21,6 +21,10 @@ class PuzzlesAPI {
     return axios.post('/puzzles/', data)
   }
 
+  static deletePuzzle (puzzleId) {
+    return axios.delete(`/puzzles/${puzzleId}`)
+  }
+
   static updatePuzzle (id, data) {
     return axios.put(`/puzzles/${id}`, data)
   }

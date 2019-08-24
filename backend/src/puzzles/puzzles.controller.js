@@ -11,7 +11,7 @@ router.get('/:puzzleId', getById)
 router.post('/:puzzleId/vote', vote)
 router.post('/', upload.single('file'), create)
 router.put('/:puzzleId', checkAuthor, update)
-// router.delete('/:id', _delete)
+router.delete('/:puzzleId', _delete)
 
 function getAll (req, res, next) {
   let userId = req.user.sub
@@ -69,11 +69,11 @@ function update (req, res, next) {
     .catch((err) => next(err))
 }
 
-// function _delete (req, res, next) {
-//   puzzlesService
-//     .delete(req.params.id)
-//     .then(() => res.json({}))
-//     .catch((err) => next(err))
-// }
+function _delete (req, res, next) {
+  puzzlesService
+    .delete(req.params.puzzleId)
+    .then(() => res.json({}))
+    .catch((err) => next(err))
+}
 
 export default router

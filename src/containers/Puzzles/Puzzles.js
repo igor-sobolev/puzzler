@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 
 import { PageLayout } from '@/components/UI/PageLayout'
 import { PuzzleCard } from '@/components/UI/PuzzleCard'
@@ -20,7 +21,7 @@ class Puzzles extends Component {
   }
 
   render () {
-    const puzzles = this.props.puzzles.map((puzzle) => (
+    const puzzles = this.props.puzzles.map(puzzle => (
       <Grid
         item
         xs={12}
@@ -40,18 +41,18 @@ class Puzzles extends Component {
           container
           spacing={2}
         >
-          {puzzles}
+          {puzzles.length ? puzzles : <Typography variant="subtitle2">No puzzles</Typography>}
         </Grid>
       </PageLayout>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   puzzles: state.puzzles.puzzles
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   loadAllPuzzles: () => dispatch(loadAllPuzzles()),
   voteForPuzzle: ({ puzzleId, rating }) => dispatch(voteForPuzzle({ puzzleId, rating }))
 })

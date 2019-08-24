@@ -17,7 +17,7 @@ import { resolveImage } from '@/util/files'
 import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
 import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
 
-const styles = createStyles((theme) => ({
+const styles = createStyles(theme => ({
   startOverlay: {
     width: '100%',
     height: '100%',
@@ -100,6 +100,7 @@ class Playground extends Component {
                     <img
                       src={resolveImage(this.props.puzzle.preview)}
                       className={this.props.classes.preview}
+                      alt="preview"
                     />
                     <Button
                       color="secondary"
@@ -129,18 +130,18 @@ class Playground extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   puzzle: state.puzzles.puzzle,
   isStarted: state.playground.isStarted,
   pieces: state.playground.pieces,
   activePiece: state.playground.activePiece
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  loadPuzzleById: (id) => dispatch(loadPuzzleById(id)),
-  handleStart: (puzzle) => dispatch(startGame(puzzle)),
+const mapDispatchToProps = dispatch => ({
+  loadPuzzleById: id => dispatch(loadPuzzleById(id)),
+  handleStart: puzzle => dispatch(startGame(puzzle)),
   clear: () => dispatch(clearPlayground()),
-  selectPiece: (piece) => dispatch(selectGamePiece(piece))
+  selectPiece: piece => dispatch(selectGamePiece(piece))
 })
 
 export default connect(

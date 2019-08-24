@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 
 import { PageLayout } from '@/components/UI/PageLayout'
 import { OwnPuzzleCard } from '@/components/UI/OwnPuzzleCard'
@@ -42,7 +43,7 @@ class Puzzles extends Component {
           container
           spacing={2}
         >
-          {puzzles}
+          {puzzles.length ? puzzles : <Typography variant="subtitle2">No puzzles</Typography>}
         </Grid>
         <Link to="/puzzles/new">
           <AddBtn />

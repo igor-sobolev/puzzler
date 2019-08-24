@@ -151,11 +151,21 @@ export const voteForPuzzle = ({ puzzleId, rating }) => {
 }
 
 export const editPuzzle = (puzzle) => {
-  console.log('edit', puzzle)
+  return async () => {
+    console.log('edit', puzzle)
+  }
 }
 
 export const deletePuzzle = (puzzle) => {
-  console.log('delete', puzzle)
+  return async (dispatch) => {
+    try {
+      await PuzzlesAPI.deletePuzzle(puzzle._id)
+      dispatch(loadAllUserPuzzles())
+    } catch (e) {
+      console.log(e)
+      toastService.error('Failed to delete puzzle')
+    }
+  }
 }
 
 const fetchPuzzleImage = async (dispatch, getState) => {

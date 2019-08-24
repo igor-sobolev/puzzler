@@ -10,13 +10,19 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  content: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: theme.spacing(3)
   }
 })
 
 const PageLayout = (props) => (
   <article className={props.classes.container}>
     <PageHeading>{props.title}</PageHeading>
-    {props.children}
+    <div className={props.classes.content}>{props.children}</div>
   </article>
 )
 

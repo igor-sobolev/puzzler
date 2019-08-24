@@ -3,15 +3,23 @@ import PropTypes from 'prop-types'
 import {
   makeStyles,
   Grid,
-  IconButton,
   Card,
   Typography,
   CardContent,
-  Avatar
+  Avatar,
+  MenuItem,
+  colors
 } from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
+import moment from 'moment'
 
-const useStyles = makeStyles((theme) => ({
+import { PopupMenu } from '@/containers/PopupMenu'
+
+import { resolveImage } from '@/util/files'
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    width: '100%'
+  },
   title: {
     whiteSpace: 'nowrap',
     display: 'flex',
@@ -21,21 +29,37 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0, 2),
     boxSizing: 'border-box'
   },
+  description: {
+    display: 'flex',
+    flexGrow: 1,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    margin: theme.spacing(0, 0, 1),
+    boxSizing: 'border-box',
+    fontSize: 14,
+    color: colors.grey[500]
+  },
   textInfo: {
     flexGrow: 1
   },
   preview: {
     width: 120,
     height: 120
+  },
+  subheading: {
+    fontWeight: 600
   }
 }))
 
-export const OwnPuzzleCard = (props) => {
+export const OwnPuzzleCard = props => {
   const classes = useStyles()
 
   return (
-    <Card component="div">
-      <CardContent>
+    <Card
+      component="div"
+      className={classes.card}
+    >
+      <CardContent width="100%">
         <Grid
           container
           spacing={2}
@@ -43,7 +67,7 @@ export const OwnPuzzleCard = (props) => {
           <Grid item>
             <Avatar
               className={classes.preview}
-              src="https://material-ui.com/static/images/avatar/1.jpg"
+              src={resolveImage(props.puzzle.preview)}
             />
           </Grid>
           <Grid
@@ -62,25 +86,51 @@ export const OwnPuzzleCard = (props) => {
               >
                 {props.puzzle.name}
               </Typography>
-              <IconButton size="small">
-                <MoreVertIcon />
-              </IconButton>
+              <PopupMenu>
+                <MenuItem onClick={props.handleEdit}>Edit</MenuItem>
+                <MenuItem onClick={props.handleDelete}>Delete</MenuItem>
+              </PopupMenu>
+            </Grid>
+            <Grid
+              container
+              alignItems="flex-start"
+            >
+              <Typography
+                gutterBottom
+                variant="h3"
+                component="h2"
+                className={classes.description}
+              >
+                {props.puzzle.description || 'No description'}
+              </Typography>
             </Grid>
             <Grid
               container
               spacing={2}
             >
               <Grid item>
-                <Typography>Size: $size</Typography>
+                <Grid container>
+                  <Typography className={classes.subheading}>Size:&nbsp;</Typography>
+                  <Typography>{props.puzzle.size}</Typography>
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography>Average time to solve: $size</Typography>
+                <Grid container>
+                  <Typography className={classes.subheading}>Average time to solve:&nbsp;</Typography>
+                  <Typography>$size</Typography>
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography>Average moves to solve: $size</Typography>
+                <Grid container>
+                  <Typography className={classes.subheading}>Average moves to solve:&nbsp;</Typography>
+                  <Typography>$size</Typography>
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography>Creation date: $size</Typography>
+                <Grid container>
+                  <Typography className={classes.subheading}>Creation date:&nbsp;</Typography>
+                  <Typography>{moment(props.puzzle.createdDate).format('LLL')}</Typography>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -92,5 +142,6 @@ export const OwnPuzzleCard = (props) => {
 
 OwnPuzzleCard.propTypes = {
   puzzle: PropTypes.object,
-  handleVote: PropTypes.func
+  handleDelete: PropTypes.func,
+  handleEdit: PropTypes.func
 }
