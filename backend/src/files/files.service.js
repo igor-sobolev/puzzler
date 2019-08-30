@@ -42,18 +42,15 @@ async function remove (filename) {
 async function cutImageToPieces (imageFileName, size) {
   var fileName = path.join(uploadsDir, imageFileName)
   var nameWithExt = path.parse(imageFileName)
-  // var fileOutputName = path.join(uploadsDir, 'resized-' + imageFileName)
   let pieceSize = getPieceSize(size)
   let image = await resizeImage(fileName)
   let extracted = await extractPieces(image, pieceSize, nameWithExt)
-  console.log(extracted)
   return extracted
 }
 
 async function extractPieces (imageBuffer, pieceSize, nameWithExt) {
   let image = sharp(imageBuffer)
   let files = []
-  console.log(image)
   for (let i = 0; i < IMAGE_DIMENSION_SIZE; i += pieceSize) {
     for (let j = 0; j < IMAGE_DIMENSION_SIZE; j += pieceSize) {
       let pieceFileName = `${nameWithExt.name}-${Buffer.from(`${i}-${j}`).toString('base64')}${

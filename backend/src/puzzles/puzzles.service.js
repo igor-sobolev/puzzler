@@ -39,7 +39,6 @@ async function vote (puzzleId, userId, rating) {
 
 async function create (payload, userId, imageFileName) {
   if (await Puzzle.findOne({ name: payload.name })) {
-    // console.log(withName);
     filesService.remove(imageFileName)
     throw 'This puzzle name has been taken'
   }

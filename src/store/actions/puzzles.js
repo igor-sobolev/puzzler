@@ -160,6 +160,7 @@ export const deletePuzzle = (puzzle) => {
   return async (dispatch) => {
     try {
       await PuzzlesAPI.deletePuzzle(puzzle._id)
+      toastService.success('Puzzle was deleted')
       dispatch(loadAllUserPuzzles())
     } catch (e) {
       console.log(e)
@@ -210,7 +211,7 @@ const createOrUpdatePuzzle = async (processedPuzzle) => {
   formData.append('file', file)
   formData.append('data', JSON.stringify(data))
   let response = processedPuzzle._id
-    ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, formData)
+    ? await PuzzlesAPI.updatePuzzle(processedPuzzle._id, data)
     : await PuzzlesAPI.createPuzzle(formData)
   return response.data
 }

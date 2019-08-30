@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     height: 120
   },
   subheading: {
-    fontWeight: 600
+    fontWeight: 500
   }
 }))
 
