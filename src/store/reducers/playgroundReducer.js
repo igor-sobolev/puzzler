@@ -42,6 +42,9 @@ const swapPieces = (state, { index1, index2 }) => {
   const swapped = state.pieces.slice()
   const item1 = swapped[index1]
   const item2 = swapped[index2]
+  const tmp = item1.order // temporarily save order
+  item1.order = item2.order
+  item2.order = tmp
   swapped.splice(index1, 1, item2)
   swapped.splice(index2, 1, item1)
   return {

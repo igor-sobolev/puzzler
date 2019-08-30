@@ -49,7 +49,8 @@ export const selectGamePiece = (piece) => {
     let active = getState().playground.activePiece
     if (isNumber(active)) {
       dispatch(swapPieces(active, piece))
-      await PuzzlesAPI.checkSolution(puzzle._id, solution)
+      let response = await PuzzlesAPI.checkSolution(puzzle._id, solution)
+      if (response.data.solved) alert('YRA')
     } else {
       dispatch(select(piece))
     }

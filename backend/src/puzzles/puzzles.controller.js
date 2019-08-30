@@ -11,6 +11,7 @@ router.get('/:puzzleId', getById)
 router.post('/:puzzleId/vote', vote)
 router.post('/', upload.single('file'), create)
 router.put('/:puzzleId', checkAuthor, update)
+router.put('/:puzzleId/solution', checkSolution)
 router.delete('/:puzzleId', _delete)
 
 function getAll (req, res, next) {
@@ -66,6 +67,13 @@ function update (req, res, next) {
   puzzlesService
     .update(req.params.puzzleId, req.body)
     .then(() => res.json({}))
+    .catch((err) => next(err))
+}
+
+function checkSolution (req, res, next) {
+  puzzlesService
+    .checkSolution(req.params.puzzleId, req.body)
+    .then((result) => res.json({solved: result}))
     .catch((err) => next(err))
 }
 

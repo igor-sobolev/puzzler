@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box'
 const { SERVER_URL } = config
 
 const useStyles = (cols) =>
-  makeStyles((theme) => ({
+  makeStyles(() => ({
     boxContainer: {
       border: '1px solid #777',
       padding: 2,
@@ -47,10 +47,10 @@ export const PiecePlacer = (props) => {
   const pieces = props.pieces.map((piece, index) => (
     <Box
       className={`${classes.piece} ${props.active === index ? classes.active : ''}`}
-      key={piece}
+      key={piece.order}
     >
       <img
-        src={resolveImg(piece)}
+        src={resolveImg(piece.tile)}
         className={classes.thumb}
         onClick={() => props.handleClick(index)}
         alt="piece"

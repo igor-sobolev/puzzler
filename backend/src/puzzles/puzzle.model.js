@@ -2,14 +2,19 @@ import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
 
+const PuzzleTile = mongoose.Schema({
+  order: Number,
+  tile: String
+},{ _id : false })
+
 const puzzleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, unique: true, required: true },
   size: { type: String, required: true },
   description: { type: String },
   preview: { type: String },
-  solution: { type: Array },
-  piecesToSolve: { type: Array },
+  solution: [PuzzleTile],
+  piecesToSolve: [PuzzleTile],
   isDeleted: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now }
 })

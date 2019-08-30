@@ -60,7 +60,7 @@ async function extractPieces (imageBuffer, pieceSize, nameWithExt) {
       await image
         .extract({ left: j, top: i, width: pieceSize, height: pieceSize })
         .toFile(jointPath)
-      files.push(pieceFileName)
+      files.push({ order: files.length, tile: pieceFileName })
     }
   }
   return files

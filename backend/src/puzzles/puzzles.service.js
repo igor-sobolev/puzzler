@@ -1,9 +1,6 @@
-﻿// import jwt from 'jsonwebtoken' // TODO: remove
-// import bcrypt from 'bcryptjs'
-
-// import config from '../config.json' TODO: remove
-import db from '../_helpers/db'
+﻿import db from '../_helpers/db'
 import filesService from '../files/files.service'
+import _ from 'lodash'
 
 const Puzzle = db.Puzzle
 const PuzzleVote = db.PuzzleVote
@@ -17,7 +14,8 @@ export default {
   create,
   checkAuthor,
   update,
-  delete: _delete
+  delete: _delete,
+  checkSolution
 }
 
 async function vote (puzzleId, userId, rating) {
@@ -156,6 +154,23 @@ async function update (puzzleId, data) {
   Object.assign(puzzle, data)
 
   return await puzzle.save()
+}
+
+async function checkSolution (puzzleId, pieces) {
+  const puzzle = await Puzzle.findById(puzzleId)
+
+  // validate
+  if (!puzzle) throw 'Puzzle not found'
+
+  return _.isEqualWith(_.sortBy(puzzle.solution, ['order']), _.sortBy(pieces, ['order']), (first, second) => {
+    let check = true
+    for (let i = 0; i < first.length; i++) {
+      if (first[i].tile !== second[i].tile) {
+        check = false
+      }
+    }
+    return check
+  })
 }
 
 async function _delete (puzzleId) {
