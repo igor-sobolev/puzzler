@@ -13,6 +13,7 @@ import {
 import moment from 'moment'
 
 import { PopupMenu } from '@/containers/PopupMenu'
+import { Clock } from '@/components/UI/Clock'
 
 import { resolveImage } from '@/util/files'
 
@@ -47,7 +48,11 @@ const useStyles = makeStyles(theme => ({
     height: 120
   },
   subheading: {
-    fontWeight: 500
+    fontWeight: 500,
+    color: theme.palette.secondary.dark
+  },
+  value: {
+    color: colors.grey[600]
   }
 }))
 
@@ -111,25 +116,27 @@ export const OwnPuzzleCard = props => {
               <Grid item>
                 <Grid container>
                   <Typography className={classes.subheading}>Size:&nbsp;</Typography>
-                  <Typography>{props.puzzle.size}</Typography>
+                  <Typography className={classes.value}>{props.puzzle.size}</Typography>
                 </Grid>
               </Grid>
               <Grid item>
                 <Grid container>
                   <Typography className={classes.subheading}>Average time to solve:&nbsp;</Typography>
-                  <Typography>$size</Typography>
+                  <Typography className={classes.value}>
+                    <Clock time={props.puzzle.time} />
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid item>
                 <Grid container>
                   <Typography className={classes.subheading}>Average moves to solve:&nbsp;</Typography>
-                  <Typography>$size</Typography>
+                  <Typography className={classes.value}>{props.puzzle.moves}</Typography>
                 </Grid>
               </Grid>
               <Grid item>
                 <Grid container>
                   <Typography className={classes.subheading}>Creation date:&nbsp;</Typography>
-                  <Typography>{moment(props.puzzle.createdDate).format('LLL')}</Typography>
+                  <Typography className={classes.value}>{moment(props.puzzle.createdDate).format('LLL')}</Typography>
                 </Grid>
               </Grid>
             </Grid>

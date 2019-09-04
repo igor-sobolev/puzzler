@@ -1,15 +1,17 @@
 import React from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
-import { makeStyles, Grid } from '@material-ui/core'
+import { makeStyles, Grid, colors } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { Card, Typography, CardActions, Button, CardContent, Box } from '@material-ui/core'
 
 import { Rating } from '@/components/UI/Rating'
+import { Clock } from '@/components/UI/Clock'
 
 import { resolveImage } from '@/util/files'
+import { palette } from '@material-ui/system';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   image: {
     maxWidth: '100%',
     width: 200,
@@ -34,13 +36,19 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end'
   },
   value: {
-    color: theme.palette.secondary.dark
+    color: colors.grey[600],
+    fontSize: 14
+  },
+  param: {
+    fontWeight: 500,
+    color: theme.palette.secondary.dark,
+    display: 'inline'
   }
 }))
 
-export const PuzzleCardFull = (props) => {
+export const PuzzleCardFull = props => {
   const classes = useStyles()
-  const handleRatingChange = (value) => {
+  const handleRatingChange = value => {
     props.handleVote({ puzzleId: props.puzzle._id, rating: value })
   }
 
@@ -84,42 +92,42 @@ export const PuzzleCardFull = (props) => {
                 handleChange={handleRatingChange}
               />
             </Box>
-            <Typography variant="subtitle1">
-              Author:&nbsp;
+            <Box>
+              <Typography className={classes.param}>Author:&nbsp;</Typography>
               <Link
                 to={`/users/${props.puzzle.author._id}`}
                 className={classes.profileLink}
               >
                 {props.puzzle.author.firstName} {props.puzzle.author.lastName}
               </Link>
-            </Typography>
-            <Typography variant="subtitle1">
-              Created:&nbsp;
-              <Box
+            </Box>
+            <Box>
+              <Typography className={classes.param}>Created:&nbsp;</Typography>
+              <Typography
                 component="span"
                 className={classes.value}
               >
                 {moment(props.puzzle.createdDate).format('LLL')}
-              </Box>
-            </Typography>
-            <Typography variant="subtitle1">
-              Average moves:&nbsp;
-              <Box
+              </Typography>
+            </Box>
+            <Box>
+              <Typography className={classes.param}>Average moves:&nbsp;</Typography>
+              <Typography
                 component="span"
                 className={classes.value}
               >
-                TODO
-              </Box>
-            </Typography>
-            <Typography variant="subtitle1">
-              Average time:&nbsp;
-              <Box
+                {props.puzzle.moves}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography className={classes.param}>Average time:&nbsp;</Typography>
+              <Typography
                 component="span"
                 className={classes.value}
               >
-                TODO
-              </Box>
-            </Typography>
+                <Clock time={props.puzzle.time} />
+              </Typography>
+            </Box>
           </Grid>
         </Grid>
       </CardContent>

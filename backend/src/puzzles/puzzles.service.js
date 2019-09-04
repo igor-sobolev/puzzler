@@ -97,8 +97,22 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
       }
     },
     {
+      $lookup: {
+        from: PuzzleSolution.collection.name,
+        localField: '_id',
+        foreignField: 'puzzle',
+        as: 'solutions'
+      }
+    },
+    {
       $unwind: {
         path: '$votes',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $unwind: {
+        path: '$solutions',
         preserveNullAndEmptyArrays: true
       }
     },
@@ -112,13 +126,30 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
         preview: { $first: '$preview' },
         createdDate: { $first: '$createdDate' },
         votes: { $push: '$votes' },
+        solutions: { $push: '$solutions' },
         piecesToSolve: { $first: '$piecesToSolve' },
         isVoted: { $max: { $eq: ['$votes.author', ObjectId(userId)] } },
         rating: {
           $avg: '$votes.rating'
         },
+        avgMoves: {
+          $avg: '$solutions.moves'
+        },
+        avgTime: {
+          $avg: '$solutions.time'
+        },
         votedValue: {
           $max: { $cond: [{ $eq: ['$votes.author', ObjectId(userId)] }, '$votes.rating', null] }
+        }
+      }
+    },
+    {
+      $addFields: {
+        moves: {
+          $round: ['$avgMoves']
+        },
+        time: {
+          $round: ['$avgTime']
         }
       }
     },
@@ -130,7 +161,10 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
     },
     {
       $project: {
-        votes: false
+        votes: false,
+        solutions: false,
+        avgMoves: false,
+        avgTime: false
       }
     }
   ]
