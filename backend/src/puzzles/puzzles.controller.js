@@ -1,6 +1,7 @@
 ﻿import express from 'express'
 import puzzlesService from './puzzles.service'
 import { upload } from '../storage'
+import { STATUS_OK } from '../enum/httpStatuses.enum'
 
 const router = express.Router()
 
@@ -12,6 +13,7 @@ router.post('/:puzzleId/vote', vote)
 router.post('/', upload.single('file'), create)
 router.put('/:puzzleId', checkAuthor, update)
 router.put('/:puzzleId/solution', checkSolution)
+router.post('/:puzzleId/solution', saveSolution)
 router.delete('/:puzzleId', _delete)
 
 function getAll (req, res, next) {
@@ -74,6 +76,13 @@ function checkSolution (req, res, next) {
   puzzlesService
     .checkSolution(req.params.puzzleId, req.body)
     .then((result) => res.json({solved: result}))
+    .catch((err) => next(err))
+}
+
+function saveSolution (req, res, next) {
+  puzzlesService
+    .saveSolution(req.params.puzzleId, req.user.sub, req.body)
+    .then(() => res.sendStatus(STATUS_OK))
     .catch((err) => next(err))
 }
 

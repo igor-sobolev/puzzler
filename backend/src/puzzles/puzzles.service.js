@@ -1,10 +1,19 @@
 ﻿import db from '../_helpers/db'
 import filesService from '../files/files.service'
 import _ from 'lodash'
+import * as puzzleSizes from '../enum/puzzleSizes.enum'
 
 const Puzzle = db.Puzzle
 const PuzzleVote = db.PuzzleVote
+const PuzzleSolution = db.PuzzleSolution
 const ObjectId = db.ObjectId
+
+const SIZE_FACTOR = 1000
+const TIME_PENALTY = 20
+const MOVE_PENALTY = 200
+const SMALL_SIZE_COEFFICIENT = 4
+const MEDIUM_SIZE_COEFFICIENT = 8
+const LARGE_SIZE_COEFFICIENT = 16
 
 export default {
   getAll,
@@ -15,7 +24,8 @@ export default {
   checkAuthor,
   update,
   delete: _delete,
-  checkSolution
+  checkSolution,
+  saveSolution
 }
 
 async function vote (puzzleId, userId, rating) {
@@ -162,15 +172,42 @@ async function checkSolution (puzzleId, pieces) {
   // validate
   if (!puzzle) throw 'Puzzle not found'
 
-  return _.isEqualWith(_.sortBy(puzzle.solution, ['order']), _.sortBy(pieces, ['order']), (first, second) => {
-    let check = true
-    for (let i = 0; i < first.length; i++) {
-      if (first[i].tile !== second[i].tile) {
-        check = false
+  return _.isEqualWith(
+    _.sortBy(puzzle.solution, ['order']),
+    _.sortBy(pieces, ['order']),
+    (first, second) => {
+      let check = true
+      for (let i = 0; i < first.length; i++) {
+        if (first[i].tile !== second[i].tile) {
+          check = false
+        }
       }
+      return check
     }
-    return check
+  )
+}
+
+async function saveSolution (puzzleId, userId, { moves, time }) {
+  if (!moves || !time) throw 'Bad data'
+
+  let puzzle = await Puzzle.findById(puzzleId)
+
+  if (!puzzle) throw 'Puzzle not found'
+
+  let size = getPuzzleCoefficientBySize(puzzle.size)
+  let score =
+    size * SIZE_FACTOR - TIME_PENALTY * time - Number.parseInt((moves * MOVE_PENALTY) / size) // use all factors
+
+  score = score > 0 ? score : 0 // override negative values
+
+  let puzzleSolution = new PuzzleSolution({
+    author: userId,
+    puzzle: puzzleId,
+    moves,
+    time,
+    score
   })
+  return await puzzleSolution.save()
 }
 
 async function _delete (puzzleId) {
@@ -183,4 +220,15 @@ async function _delete (puzzleId) {
   Object.assign(puzzle, { isDeleted: true })
 
   return await puzzle.save()
+}
+
+function getPuzzleCoefficientBySize (size) {
+  switch (size) {
+    case puzzleSizes.SMALL:
+      return SMALL_SIZE_COEFFICIENT
+    case puzzleSizes.MEDIUM:
+      return MEDIUM_SIZE_COEFFICIENT
+    case puzzleSizes.LARGE:
+      return LARGE_SIZE_COEFFICIENT
+  }
 }

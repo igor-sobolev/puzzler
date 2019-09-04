@@ -88,7 +88,7 @@ export const finishGame = () => {
     gameTimer.stop()
     let puzzle = getState().puzzles.puzzle
     let moves = getState().playground.moves
-    let time = getState().playground.time
+    let time = getState().playground.timer
     await PuzzlesAPI.saveSolution(puzzle._id, { time, moves })
   }
 }

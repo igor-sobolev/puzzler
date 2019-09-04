@@ -26,9 +26,19 @@ const voteSchema = new Schema({
   puzzle: { type: Schema.Types.ObjectId, ref: 'Puzzle' }
 })
 
+const solutionSchema = new Schema({
+  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  moves: { type: Number },
+  time: { type: Number },
+  score: { type: Number },
+  createdDate: { type: Date, default: Date.now },
+  puzzle: { type: Schema.Types.ObjectId, ref: 'Puzzle' }
+})
+
 puzzleSchema.set('toJSON', { virtuals: true })
 voteSchema.set('toJSON', { virtuals: true })
 
 export const PuzzleVote = mongoose.model('PuzzleVote', voteSchema)
+export const PuzzleSolution = mongoose.model('PuzzleSolution', solutionSchema)
 
 export default mongoose.model('Puzzle', puzzleSchema)
