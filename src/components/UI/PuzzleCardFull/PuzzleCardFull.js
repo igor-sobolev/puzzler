@@ -9,7 +9,6 @@ import { Rating } from '@/components/UI/Rating'
 import { Clock } from '@/components/UI/Clock'
 
 import { resolveImage } from '@/util/files'
-import { palette } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   image: {

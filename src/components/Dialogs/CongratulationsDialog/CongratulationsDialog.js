@@ -51,6 +51,7 @@ export const CongratulationsDialog = (props) => {
         <img
           className={classes.image}
           src={congratsGif}
+          alt="congratulations"
         />
         <Box className={classes.param}>
           Time: <Clock time={props.time} />
