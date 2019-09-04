@@ -1,10 +1,26 @@
 import * as types from './actionTypes'
 import PuzzlesAPI from '@/api/PuzzlesAPI'
 import isNumber from 'lodash/isNumber'
+import { Timer } from '../../util/timer'
+
+let gameTimer = null
 
 const saveStarted = () => {
   return {
     type: types.START_GAME
+  }
+}
+
+const saveFinished = () => {
+  return {
+    type: types.FINISH_GAME
+  }
+}
+
+const saveTime = (time) => {
+  return {
+    type: types.SAVE_GAME_TIME,
+    time
   }
 }
 
@@ -50,7 +66,7 @@ export const selectGamePiece = (piece) => {
     if (isNumber(active)) {
       dispatch(swapPieces(active, piece))
       let response = await PuzzlesAPI.checkSolution(puzzle._id, solution)
-      if (response.data.solved) alert('YRA')
+      if (response.data.solved) dispatch(finishGame())
     } else {
       dispatch(select(piece))
     }
@@ -59,7 +75,27 @@ export const selectGamePiece = (piece) => {
 
 export const startGame = (puzzle) => {
   return async (dispatch) => {
+    gameTimer = new Timer(() => dispatch(saveTime(gameTimer.ticks)))
+    gameTimer.start()
     dispatch(saveStarted())
     dispatch(setPuzzle(puzzle))
+  }
+}
+
+export const finishGame = () => {
+  return async (dispatch, getState) => {
+    dispatch(saveFinished())
+    gameTimer.stop()
+    let puzzle = getState().puzzles.puzzle
+    let moves = getState().playground.moves
+    let time = getState().playground.time
+    await PuzzlesAPI.saveSolution(puzzle._id, { time, moves })
+  }
+}
+
+export const stopGame = () => {
+  return async (dispatch) => {
+    dispatch(clearPlayground())
+    gameTimer.stop()
   }
 }

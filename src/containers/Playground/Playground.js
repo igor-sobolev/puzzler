@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 import { createStyles, withStyles } from '@material-ui/core'
 
 import Card from '@material-ui/core/Card'
@@ -10,14 +11,22 @@ import Button from '@material-ui/core/Button'
 
 import { PageLayout } from '@/components/UI/PageLayout'
 import { PiecePlacer } from '@/components/UI/PiecePlacer'
+import { Clock } from '@/components/UI/Clock'
+import { CongratulationsDialog } from '../../components/Dialogs/CongratulationsDialog'
 
-import { loadPuzzleById, startGame, clearPlayground, selectGamePiece } from '@/store/actions'
+import {
+  loadPuzzleById,
+  startGame,
+  clearPlayground,
+  selectGamePiece,
+  stopGame
+} from '@/store/actions'
 import { resolveImage } from '@/util/files'
 
 import { SMALL, MEDIUM, LARGE } from '@/enum/puzzleSizes.enum'
 import { SMALL_PIECES, MEDIUM_PIECES, LARGE_PIECES } from '@/enum/piecesMapping.enum'
 
-const styles = createStyles(theme => ({
+const styles = createStyles((theme) => ({
   startOverlay: {
     width: '100%',
     height: '100%',
@@ -52,6 +61,25 @@ const styles = createStyles(theme => ({
     objectFit: 'cover',
     opacity: 0.2,
     margin: theme.spacing(2)
+  },
+  scoreContainer: {
+    display: 'flex',
+    flexGrow: 1,
+    marginTop: theme.spacing(2)
+  },
+  scoreEntry: {
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'center',
+    color: theme.palette.secondary.dark,
+    fontWeight: 500,
+    alignItems: 'center'
+  },
+  scoreEntryValue: {
+    fontWeight: 'normal',
+    display: 'inline-block',
+    margin: theme.spacing(0, 1),
+    color: '#555'
   }
 }))
 
@@ -64,14 +92,23 @@ class Playground extends Component {
     puzzle: PropTypes.object,
     classes: PropTypes.object,
     isStarted: PropTypes.bool,
+    isSolved: PropTypes.bool,
+    moves: PropTypes.number,
+    time: PropTypes.number,
     pieces: PropTypes.array,
     activePiece: PropTypes.number,
-    selectPiece: PropTypes.func
+    selectPiece: PropTypes.func,
+    stop: PropTypes.func,
+    push: PropTypes.func
   }
 
   componentDidMount () {
     this.props.clear()
     this.props.loadPuzzleById(this.props.match.params.pid)
+  }
+
+  componentWillUnmount () {
+    if (this.props.isStarted) this.props.stop()
   }
 
   alignColumnNumberToPuzzleSize = () => {
@@ -95,7 +132,7 @@ class Playground extends Component {
           {this.props.puzzle ? (
             <Card className={this.props.classes.playground}>
               <CardContent>
-                {!this.props.isStarted ? (
+                {!this.props.isStarted && !this.props.isSolved ? (
                   <Box className={this.props.classes.startOverlay}>
                     <img
                       src={resolveImage(this.props.puzzle.preview)}
@@ -111,6 +148,16 @@ class Playground extends Component {
                     </Button>
                   </Box>
                 ) : null}
+                <CongratulationsDialog
+                  open={this.props.isSolved}
+                  time={this.props.time}
+                  moves={this.props.moves}
+                  leave={() => this.props.push('/puzzles')}
+                  leaderboard={() =>
+                    this.props.push(`/puzzles/${this.props.puzzle._id}/leaderboard`)
+                  }
+                  restart={this.props.clear}
+                />
                 {this.props.pieces && this.props.pieces.length ? (
                   <PiecePlacer
                     pieces={this.props.pieces}
@@ -118,6 +165,20 @@ class Playground extends Component {
                     handleClick={this.props.selectPiece}
                     active={this.props.activePiece}
                   />
+                ) : null}
+                {this.props.isStarted ? (
+                  <Box className={this.props.classes.scoreContainer}>
+                    <Box className={this.props.classes.scoreEntry}>
+                      Time:{' '}
+                      <Box className={this.props.classes.scoreEntryValue}>
+                        <Clock time={this.props.time} />
+                      </Box>
+                    </Box>
+                    <Box className={this.props.classes.scoreEntry}>
+                      Moves:{' '}
+                      <Box className={this.props.classes.scoreEntryValue}>{this.props.moves}</Box>
+                    </Box>
+                  </Box>
                 ) : null}
               </CardContent>
             </Card>
@@ -130,18 +191,23 @@ class Playground extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   puzzle: state.puzzles.puzzle,
   isStarted: state.playground.isStarted,
+  isSolved: state.playground.isSolved,
+  moves: state.playground.moves,
+  time: state.playground.timer,
   pieces: state.playground.pieces,
   activePiece: state.playground.activePiece
 })
 
-const mapDispatchToProps = dispatch => ({
-  loadPuzzleById: id => dispatch(loadPuzzleById(id)),
-  handleStart: puzzle => dispatch(startGame(puzzle)),
+const mapDispatchToProps = (dispatch) => ({
+  loadPuzzleById: (id) => dispatch(loadPuzzleById(id)),
+  handleStart: (puzzle) => dispatch(startGame(puzzle)),
   clear: () => dispatch(clearPlayground()),
-  selectPiece: piece => dispatch(selectGamePiece(piece))
+  stop: () => dispatch(stopGame()),
+  selectPiece: (piece) => dispatch(selectGamePiece(piece)),
+  push: (url) => dispatch(push(url))
 })
 
 export default connect(

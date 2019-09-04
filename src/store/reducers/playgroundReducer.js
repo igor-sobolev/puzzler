@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes'
+import cloneDeep from 'lodash/cloneDeep'
 
 const initializeState = () => {
   return {
@@ -6,6 +7,7 @@ const initializeState = () => {
     isStarted: false,
     activePiece: null,
     moves: 0,
+    isSolved: false,
     timer: 0
   }
 }
@@ -17,10 +19,25 @@ const startGame = (state) => {
   }
 }
 
+const finishGame = (state) => {
+  return {
+    ...state,
+    isStarted: false,
+    isSolved: true
+  }
+}
+
+const saveTimer = (state, { time }) => {
+  return {
+    ...state,
+    timer: time
+  }
+}
+
 const setPuzzle = (state, { puzzle }) => {
   return {
     ...state,
-    pieces: [...puzzle.piecesToSolve]
+    pieces: cloneDeep(puzzle.piecesToSolve)
   }
 }
 
@@ -59,6 +76,10 @@ const reducer = (state = initializeState(), action) => {
   switch (action.type) {
     case actionTypes.START_GAME:
       return startGame(state, action)
+    case actionTypes.FINISH_GAME:
+      return finishGame(state, action)
+    case actionTypes.SAVE_GAME_TIME:
+      return saveTimer(state, action)
     case actionTypes.SET_PUZZLE_TO_PLAYGROUND:
       return setPuzzle(state, action)
     case actionTypes.CLEAR_PLAYGROUND:

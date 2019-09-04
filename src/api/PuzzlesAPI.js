@@ -32,6 +32,10 @@ class PuzzlesAPI {
   static checkSolution (id, data) {
     return axios.put(`/puzzles/${id}/solution`, data)
   }
+
+  static saveSolution (id, data) {
+    return axios.post(`/puzzles/${id}/solution`, data)
+  }
 }
 
 export default PuzzlesAPI

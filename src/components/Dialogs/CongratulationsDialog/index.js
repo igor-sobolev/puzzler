@@ -1,0 +1,1 @@
+export { CongratulationsDialog } from './CongratulationsDialog'
