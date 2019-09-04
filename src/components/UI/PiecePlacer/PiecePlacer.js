@@ -28,7 +28,8 @@ const useStyles = (cols) =>
       height: `calc(${100 / cols}%)`,
       boxSizing: 'border-box',
       borderRadius: 2,
-      border: '1px solid transparent'
+      border: '1px solid transparent',
+      userSelect: 'none'
     },
     active: {
       borderColor: colors.yellow[700],
@@ -54,6 +55,7 @@ export const PiecePlacer = (props) => {
         className={classes.thumb}
         onClick={() => props.handleClick(index)}
         alt="piece"
+        draggable="false"
       ></img>
     </Box>
   ))
