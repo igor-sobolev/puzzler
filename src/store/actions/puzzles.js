@@ -151,8 +151,16 @@ export const voteForPuzzle = ({ puzzleId, rating }) => {
 }
 
 export const editPuzzle = (puzzle) => {
-  return async () => {
-    console.log('edit', puzzle)
+  return async (dispatch) => {
+    dispatch(push(`/puzzles/${puzzle._id}/edit`))
+  }
+}
+
+export const loadPuzzleToProcess = (puzzleId) => {
+  return async (dispatch) => {
+    let response = await PuzzlesAPI.loadPuzzleById(puzzleId)
+    let puzzle = response.data
+    dispatch(saveCreated(puzzle))
   }
 }
 

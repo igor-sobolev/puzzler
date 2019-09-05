@@ -96,6 +96,11 @@ class RouterView extends Component {
             component={LazyPuzzle}
           />
           <Route
+            path="/puzzles/:pid/edit"
+            exact
+            component={LazyProcessPuzzle}
+          />
+          <Route
             path="/puzzles/:pid/leaderboard"
             exact
             component={LazyLeaderboard}
