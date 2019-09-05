@@ -158,9 +158,14 @@ export const editPuzzle = (puzzle) => {
 
 export const loadPuzzleToProcess = (puzzleId) => {
   return async (dispatch) => {
-    let response = await PuzzlesAPI.loadPuzzleById(puzzleId)
-    let puzzle = response.data
-    dispatch(saveCreated(puzzle))
+    dispatch(startLoading())
+    try {
+      let response = await PuzzlesAPI.loadPuzzleById(puzzleId)
+      let puzzle = response.data
+      dispatch(saveCreated(puzzle))
+    } finally {
+      dispatch(stopLoading())
+    }
   }
 }
 
