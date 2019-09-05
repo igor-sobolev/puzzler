@@ -25,6 +25,10 @@ class PuzzlesAPI {
     return axios.delete(`/puzzles/${puzzleId}`)
   }
 
+  static loadPuzzleLeaders (puzzleId) {
+    return axios.get(`/puzzles/${puzzleId}/leaderboard`)
+  }
+
   static updatePuzzle (id, data) {
     return axios.put(`/puzzles/${id}`, data)
   }

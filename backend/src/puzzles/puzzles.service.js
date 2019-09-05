@@ -1,6 +1,6 @@
 ﻿import db from '../_helpers/db'
 import filesService from '../files/files.service'
-import _ from 'lodash'
+import _, { isNumber } from 'lodash'
 import * as puzzleSizes from '../enum/puzzleSizes.enum'
 
 const Puzzle = db.Puzzle
@@ -25,7 +25,8 @@ export default {
   update,
   delete: _delete,
   checkSolution,
-  saveSolution
+  saveSolution,
+  getLeaders
 }
 
 async function vote (puzzleId, userId, rating) {
@@ -188,6 +189,28 @@ async function aggregateAllAndPopulate (userId, puzzleId, filterOwn = false) {
   return Puzzle.populate(aggregated, { path: 'author' })
 }
 
+async function getLeaders (puzzleId) {
+  const pipeline = [
+    {
+      $match: {
+        puzzle: ObjectId(puzzleId)
+      }
+    },
+    {
+      $sort: {
+        score: -1
+      }
+    },
+    {
+      $limit: 10
+    }
+  ]
+
+  const aggregated = await PuzzleSolution.aggregate(pipeline)
+
+  return await Puzzle.populate(aggregated, { path: 'author' })
+}
+
 async function update (puzzleId, data) {
   const puzzle = await Puzzle.findById(puzzleId)
 
@@ -222,7 +245,7 @@ async function checkSolution (puzzleId, pieces) {
 }
 
 async function saveSolution (puzzleId, userId, { moves, time }) {
-  if (!moves || !time) throw 'Bad data'
+  if (!isNumber(moves) || !isNumber(time)) throw 'Bad data'
 
   let puzzle = await Puzzle.findById(puzzleId)
 

@@ -37,6 +37,7 @@ const solutionSchema = new Schema({
 
 puzzleSchema.set('toJSON', { virtuals: true })
 voteSchema.set('toJSON', { virtuals: true })
+solutionSchema.set('toJSON', { virtuals: true })
 
 export const PuzzleVote = mongoose.model('PuzzleVote', voteSchema)
 export const PuzzleSolution = mongoose.model('PuzzleSolution', solutionSchema)

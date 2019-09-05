@@ -10,7 +10,7 @@ import { Clock } from '@/components/UI/Clock'
 
 import { resolveImage } from '@/util/files'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   image: {
     maxWidth: '100%',
     width: 200,
@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'flex-end'
   },
+  btnLink: {
+    textDecoration: 'none'
+  },
   value: {
     color: colors.grey[600],
     fontSize: 14
@@ -45,9 +48,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export const PuzzleCardFull = props => {
+export const PuzzleCardFull = (props) => {
   const classes = useStyles()
-  const handleRatingChange = value => {
+  const handleRatingChange = (value) => {
     props.handleVote({ puzzleId: props.puzzle._id, rating: value })
   }
 
@@ -131,14 +134,22 @@ export const PuzzleCardFull = props => {
         </Grid>
       </CardContent>
       <CardActions className={classes.buttons}>
-        <Button
-          size="small"
-          color="secondary"
-          variant="contained"
+        <Link
+          to={`/puzzles/${props.puzzle._id}/leaderboard`}
+          className={classes.btnLink}
         >
-          Leaderboard
-        </Button>
-        <Link to={`/puzzles/${props.puzzle._id}/play`}>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+          >
+            Leaderboard
+          </Button>
+        </Link>
+        <Link
+          to={`/puzzles/${props.puzzle._id}/play`}
+          className={classes.btnLink}
+        >
           <Button
             size="small"
             color="primary"

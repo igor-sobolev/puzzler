@@ -29,6 +29,10 @@ const LazyPuzzle = React.lazy(() =>
   import('@/containers/Puzzle').then((module) => ({ default: module.Puzzle }))
 )
 
+const LazyLeaderboard = React.lazy(() =>
+  import('@/containers/Leaderboard').then((module) => ({ default: module.Leaderboard }))
+)
+
 const LazyPlay = React.lazy(() =>
   import('@/containers/Playground').then((module) => ({ default: module.Playground }))
 )
@@ -90,6 +94,11 @@ class RouterView extends Component {
             path="/puzzles/:pid"
             exact
             component={LazyPuzzle}
+          />
+          <Route
+            path="/puzzles/:pid/leaderboard"
+            exact
+            component={LazyLeaderboard}
           />
           <Route
             path="/puzzles/:pid/play"

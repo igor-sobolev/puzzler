@@ -9,6 +9,7 @@ const router = express.Router()
 router.get('/', getAll)
 router.get('/current', getCurrentUserPuzzles)
 router.get('/:puzzleId', getById)
+router.get('/:puzzleId/leaderboard', getLeaders)
 router.post('/:puzzleId/vote', vote)
 router.post('/', upload.single('file'), create)
 router.put('/:puzzleId', checkAuthor, update)
@@ -51,6 +52,14 @@ function getById (req, res, next) {
   puzzlesService
     .getById(userId, puzzleId)
     .then((puzzle) => (puzzle ? res.json(puzzle) : res.sendStatus(404)))
+    .catch((err) => next(err))
+}
+
+function getLeaders (req, res, next) {
+  let puzzleId = req.params.puzzleId
+  puzzlesService
+    .getLeaders(puzzleId)
+    .then((leaders) => (res.json(leaders)))
     .catch((err) => next(err))
 }
 

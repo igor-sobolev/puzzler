@@ -33,3 +33,5 @@ export const CLEAR_PLAYGROUND = 'CLEAR_PLAYGROUND'
 export const SELECT_PG_PIECE = 'SELECT_PG_PIECE'
 export const SWAP_PG_PIECES = 'SWAP_PG_PIECES'
 export const INC_PG_TIMER = 'INC_PG_TIMER'
+
+export const SAVE_LEADERS = 'SAVE_LEADERS'
