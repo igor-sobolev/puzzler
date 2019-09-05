@@ -42,11 +42,11 @@ const styles = createStyles((theme) => ({
   playground: {
     marginTop: theme.spacing(2),
     position: 'relative',
-    minHeight: 400
+    minHeight: `calc(400px + ${theme.spacing(2) + 30}px)`
   },
   container: {
     width: 400,
-    height: 400,
+    height: `calc(400px + ${theme.spacing(2) + 30}px)`,
     maxWidth: '100%',
     textAlign: 'center'
   },
@@ -55,8 +55,8 @@ const styles = createStyles((theme) => ({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: `calc(100% - ${theme.spacing(2) * 2}px)`,
-    height: `calc(100% - ${theme.spacing(2) * 2}px)`,
+    width: `calc(400px - ${theme.spacing(2) * 2}px)`,
+    height: `calc(400px - ${theme.spacing(2) * 2}px)`,
     boxSizing: 'border-box',
     objectFit: 'cover',
     opacity: 0.2,
@@ -65,7 +65,12 @@ const styles = createStyles((theme) => ({
   scoreContainer: {
     display: 'flex',
     flexGrow: 1,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    left: 0,
+    height: 20,
+    width: '100%'
   },
   scoreEntry: {
     display: 'flex',
@@ -166,20 +171,18 @@ class Playground extends Component {
                     active={this.props.activePiece}
                   />
                 ) : null}
-                {this.props.isStarted ? (
-                  <Box className={this.props.classes.scoreContainer}>
-                    <Box className={this.props.classes.scoreEntry}>
-                      Time:{' '}
-                      <Box className={this.props.classes.scoreEntryValue}>
-                        <Clock time={this.props.time} />
-                      </Box>
-                    </Box>
-                    <Box className={this.props.classes.scoreEntry}>
-                      Moves:{' '}
-                      <Box className={this.props.classes.scoreEntryValue}>{this.props.moves}</Box>
+                <Box className={this.props.classes.scoreContainer}>
+                  <Box className={this.props.classes.scoreEntry}>
+                    Time:{' '}
+                    <Box className={this.props.classes.scoreEntryValue}>
+                      <Clock time={this.props.time} />
                     </Box>
                   </Box>
-                ) : null}
+                  <Box className={this.props.classes.scoreEntry}>
+                    Moves:{' '}
+                    <Box className={this.props.classes.scoreEntryValue}>{this.props.moves}</Box>
+                  </Box>
+                </Box>
               </CardContent>
             </Card>
           ) : (
