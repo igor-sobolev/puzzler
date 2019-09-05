@@ -68,7 +68,7 @@ const swapPieces = (state, { index1, index2 }) => {
     ...state,
     activePiece: null,
     pieces: swapped,
-    moves: state.moves + 1
+    moves: index1 !== index2 ? state.moves + 1 : state.moves
   }
 }
 
