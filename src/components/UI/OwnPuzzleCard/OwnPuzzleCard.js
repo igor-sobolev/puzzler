@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    margin: theme.spacing(1, 0, 2),
+    margin: theme.spacing(1, 0, 1),
     boxSizing: 'border-box'
   },
   description: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    margin: theme.spacing(0, 0, 1),
+    margin: theme.spacing(0, 0, 4),
     boxSizing: 'border-box',
     fontSize: 14,
     color: colors.grey[500]
