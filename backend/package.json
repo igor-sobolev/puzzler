@@ -4,7 +4,8 @@
   "description": "NodeJS + MongoDB API for Puzzler app",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js"
+    "start": "nodemon --exec babel-node src/server.js",
+    "server": "pm2 start --interpreter babel-node src/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
