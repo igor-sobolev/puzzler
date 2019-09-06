@@ -40,6 +40,14 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  profileLink: {
+    maxWidth: 300,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+    verticalAlign: 'middle'
   }
 }))
 

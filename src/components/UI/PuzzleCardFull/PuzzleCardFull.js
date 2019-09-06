@@ -45,6 +45,14 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: theme.palette.secondary.dark,
     display: 'inline'
+  },
+  profileLink: {
+    maxWidth: 180,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: 'inline-block',
+    whiteSpace: 'nowrap',
+    verticalAlign: 'middle'
   }
 }))
 

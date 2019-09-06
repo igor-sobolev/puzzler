@@ -10,14 +10,23 @@ const useStyles = makeStyles((theme) => ({
   name: {
     color: '#333',
     marginLeft: theme.spacing(1),
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
+    maxWidth: '100%',
+    display: 'inline-block',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   email: {
     marginLeft: theme.spacing(1),
-    color: theme.palette.secondary.dark
+    color: theme.palette.secondary.dark,
+    maxWidth: '100%',
+    display: 'inline-block',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   profile: {
-    width: 200
+    maxWidth: 250,
+    display: 'block'
   }
 }))
 
