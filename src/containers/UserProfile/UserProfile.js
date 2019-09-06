@@ -70,6 +70,10 @@ class UserProfile extends Component {
     this.props.loadProfile(this.props.match.params.id)
   }
 
+  componentDidUpdate () {
+    this.props.loadProfile(this.props.match.params.id)
+  }
+
   isCurrentUser = () => {
     return (
       this.props.authenticatedUser &&
