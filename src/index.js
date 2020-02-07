@@ -6,14 +6,14 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import { App } from '@/containers/App'
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
+import { ConnectedRouter as Router } from 'connected-react-router'
 import store, { history } from '@/store'
 
 const app = (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <Router history={history}>
       <App />
-    </ConnectedRouter>
+    </Router>
   </Provider>
 )
 

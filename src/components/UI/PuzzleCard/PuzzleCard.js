@@ -16,7 +16,7 @@ import { Rating } from '@/components/UI/Rating'
 
 import { resolveImage } from '@/util/files'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   headingContainer: {
     position: 'relative'
   },
@@ -48,12 +48,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     whiteSpace: 'nowrap',
     verticalAlign: 'middle'
+  },
+  btnLink: {
+    textDecoration: 'none'
   }
 }))
 
-export const PuzzleCard = (props) => {
+export const PuzzleCard = props => {
   const classes = useStyles()
-  const handleRatingChange = (value) => {
+  const handleRatingChange = value => {
     props.handleVote({ puzzleId: props.puzzle._id, rating: value })
   }
 
@@ -108,7 +111,10 @@ export const PuzzleCard = (props) => {
             View more
           </Button>
         </Link>
-        <Link to={`/puzzles/${props.puzzle._id}/play`}>
+        <Link
+          to={`/puzzles/${props.puzzle._id}/play`}
+          className={classes.btnLink}
+        >
           <Button
             size="small"
             color="primary"
