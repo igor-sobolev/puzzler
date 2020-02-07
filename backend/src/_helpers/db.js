@@ -6,7 +6,8 @@ import Puzzle, { PuzzleVote, PuzzleSolution } from '../puzzles/puzzle.model'
 
 mongoose.connect(process.env.MONGODB_URI || config.connectionString, {
   useCreateIndex: true,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 })
 
 mongoose.Promise = global.Promise
